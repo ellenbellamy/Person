@@ -1,35 +1,23 @@
 ﻿#include <iostream>
 #include <string>
+#include <fstream>
+#include "Person.h"
 
 using namespace std;
 
-class Person
-{
-
-public:
-
-	Person(const string& firstNameString, const string& middleNameString, const string& lastNameString) {
-		firstName = firstNameString;
-		lastName = middleNameString;
-		middleName = lastNameString;
-	}
-
-	void print()
-	{
-		std::cout << firstName << middleName << lastName << std::endl;
-	}
-
-private:
-	string firstName;
-	string middleName;
-	string lastName;
-
-};
-
 int main()
 {
-	Person* person = new Person("Anna", "Mary", "Smith");
+	Person person("Anna", "Mary", "Smith");
+	cout << person;
 
-	person->print();
+
+	ofstream out;
+	out.open("Persons.db", std::ios_base::app);
+
+	out << person;
+
+	out.close();
+
+
 	return 0;
 }
