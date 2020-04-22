@@ -10,7 +10,7 @@ Person::Person(const string& firstNameString, const string& middleNameString, co
 
 ostream& operator<<(ostream& out, const Person& person)
 {
-	out << person.firstName << " " << person.middleName << " " << person.lastName << std::endl;
+	out << person.firstName << " " << person.middleName << " " << person.lastName;
 	return out;
 }
 
