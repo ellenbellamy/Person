@@ -8,6 +8,18 @@ Person::Person(const string& firstNameString, const string& middleNameString, co
 	middleName = middleNameString;
 }
 
+string Person::getFirstName() {
+	return firstName;
+}
+
+string Person::getLastName() {
+	return lastName;
+}
+
+string Person::getMiddleName() {
+	return middleName;
+}
+
 ostream& operator<<(ostream& out, const Person& person)
 {
 	out << person.firstName << " " << person.middleName << " " << person.lastName;
