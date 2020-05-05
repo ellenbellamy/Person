@@ -8,6 +8,7 @@
 #include <ctime>
 #include <iomanip>
 
+std::time_t readDate(const string&);
 
 Person::Person(
 	const string& firstNameString,
@@ -20,9 +21,10 @@ Person::Person(
 	lastName = lastNameString;
 	middleName = middleNameString;
 
-	struct std::tm birthday_tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	(istringstream(birthdayString)) >> std::get_time(&birthday_tm, "%Y-%m-%d");
-	birthday = mktime(&birthday_tm);
+	//struct std::tm birthday_tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	//(istringstream(birthdayString)) >> std::get_time(&birthday_tm, "%Y-%m-%d");
+	//birthday = mktime(&birthday_tm);
+	birthday = readDate(birthdayString);
 
 	phone = phoneString;
 }
@@ -39,6 +41,11 @@ string Person::getMiddleName() const {
 	return middleName;
 }
 
+time_t Person::getBirthday() const
+{
+	return birthday;
+}
+
 //bool Person::operator==(const Person&) const {
 //	return
 //		lastNa
@@ -53,9 +60,14 @@ ostream& operator<<(ostream& out, const Person& person)
 
 std::time_t readDate(const string& dateString) {
 	struct std::tm date = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	(istringstream(dateString)) >> std::get_time(&date, "%Y-%m-%d");
 
-	//if()
+	istringstream ss = istringstream(dateString);
+	ss >> std::get_time(&date, "%Y-%m-%d");
 
-	return mktime(&date);
+	if (ss.fail()) {
+		throw WrongDateFormat();
+	}
+
+	time_t t = mktime(&date);
+	return t;
 }

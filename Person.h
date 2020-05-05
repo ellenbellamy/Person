@@ -23,6 +23,8 @@ public:
 
 	string getMiddleName() const;
 
+	time_t getBirthday() const;
+
 	//bool operator==(const Person&) const;
 	auto operator<=>(const Person&) const = default;
 
@@ -34,5 +36,11 @@ private:
 	string lastName;
 	std::time_t birthday;
 	string phone;
+};
+
+struct WrongDateFormat : public exception {
+	//const char* what() const throw () {
+	//	return "C++ Exception";
+	//}
 };
 

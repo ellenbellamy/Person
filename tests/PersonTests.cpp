@@ -18,7 +18,6 @@ namespace PersonTesting {
 		EXPECT_EQ(person.getMiddleName(), "Mary");
 	}
 
-
 	TEST(Person, WritesItself) {
 		std::stringstream ss;
 
@@ -50,11 +49,26 @@ namespace PersonTesting {
 			*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"),
 			*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 01"));
 
-		EXPECT_NE(
-			*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"),
-			*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"));
+		//EXPECT_NE(
+		//	*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"),
+		//	*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"));
+	}
 
-
+	TEST(Person, ThrowsExceptionOnWrongBirthdayFormat) {
+		Person p = Person("Anna", "Mary", "Smith", "2001-02-31", "+9 876 543 21 00");
+		EXPECT_THROW( p /*= Person("Anna", "Mary", "Smith", "2001-02-29", "+9 876 543 21 00")*/, WrongDateFormat);
+		
+		p.getBirthday();
+		//try {
+		//	Person("Anna", "Mary", "Smith", "2001-02-29", "+9 876 543 21 00");
+		//	FAIL() << "Expected WrongDateFormat";
+		//}
+		//catch (WrongDateFormat const& err) {
+		//	EXPECT_EQ(err.what(), std::string("Out of range"));
+		//}
+		//catch (...) {
+		//	FAIL() << "Expected std::out_of_range";
+		//}
 	}
 
 	//TEST(Person, ReadsItself) {
