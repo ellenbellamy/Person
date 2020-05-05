@@ -4,7 +4,7 @@
 
 namespace PersonTesting {
 
-	Person person("Anna", "Mary", "Smith");
+	Person person("Anna", "Mary", "Smith", "2001-01-01");
 	TEST(Person, HasFirstName) {
 		EXPECT_EQ(person.getFirstName(), "Anna");
 	}
@@ -26,17 +26,28 @@ namespace PersonTesting {
 		EXPECT_EQ("Anna Mary Smith", ss.str());
 	}
 
+	TEST(Person, Equality) {
+		EXPECT_EQ(* new Person("Anna", "Mary", "Smith", "2001-01-01"), * new Person("Anna", "Mary", "Smith", "2001-01-01"));
+	}
+
+	TEST(Person, Inequality) {
+		EXPECT_NE(*new Person("Anna", "Mary", "Smith", "2001-01-01"), *new Person("Anna", "Mary", "Smith_", "2001-01-01"));
+		EXPECT_NE(*new Person("Anna", "Mary", "Smith", "2001-01-01"), *new Person("Anna", "Mary_", "Smith", "2001-01-01"));
+		EXPECT_NE(*new Person("Anna", "Mary", "Smith", "2001-01-01"), *new Person("Anna_", "Mary", "Smith", "2001-01-01"));
+		EXPECT_NE(*new Person("Anna", "Mary", "Smith", "2001-01-01"), *new Person("Anna", "Mary", "Smith", "2001-01-02"));
+	}
+
 	//TEST(Person, ReadsItself) {
 	//	EXPECT_EQ()
 	//}
 
 	TEST(Person, Dates) {
 		struct std::tm birthday_tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		* std::istringstream ("2001-02-27") >> std::get_time(&birthday_tm, "%Y-%m-%d");
+		(std::istringstream("2001-02-27")) >> std::get_time(&birthday_tm, "%Y-%m-%d");
 		std::time_t birthday = std::mktime(&birthday_tm);
 
 		struct std::tm date_tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		* new std::istringstream("2001-02-26") >> std::get_time(&date_tm, "%Y-%m-%d");
+		*new std::istringstream("2001-02-26") >> std::get_time(&date_tm, "%Y-%m-%d");
 		std::time_t date = std::mktime(&date_tm);
 
 

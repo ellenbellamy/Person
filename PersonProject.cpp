@@ -7,7 +7,7 @@ using namespace std;
 
 int main()
 {
-	Person person("Anna", "Mary", "Smith");
+	Person person("Anna", "Mary", "Smith", "2002-02-20");
 	cout << person;
 
 
