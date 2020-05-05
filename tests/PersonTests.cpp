@@ -31,14 +31,15 @@ namespace PersonTesting {
 	//}
 
 	TEST(Person, Dates) {
-		struct std::tm birthday_tm = { 0, 0, 0, 27, 1, 101 };
+		struct std::tm birthday_tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		* std::istringstream ("2001-02-27") >> std::get_time(&birthday_tm, "%Y-%m-%d");
 		std::time_t birthday = std::mktime(&birthday_tm);
 
-		struct std::tm date_tm = { 0, 0, 0, 26, 1, 101 };
+		struct std::tm date_tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		* new std::istringstream("2001-02-26") >> std::get_time(&date_tm, "%Y-%m-%d");
 		std::time_t date = std::mktime(&date_tm);
 
 
 		EXPECT_EQ(std::difftime(birthday, date), 1 * 24 * 60 * 60);
-
 	}
 }
