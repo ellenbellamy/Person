@@ -14,7 +14,8 @@ public:
 		const string& firstNameString, 
 		const string& middleNameString, 
 		const string& lastNameString,
-		const string& birthdayString);
+		const string& birthdayString,
+		const string& phoneString);
 
 	string getFirstName() const;
 
@@ -32,5 +33,6 @@ private:
 	string middleName;
 	string lastName;
 	std::time_t birthday;
+	string phone;
 };
 

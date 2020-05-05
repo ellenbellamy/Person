@@ -13,7 +13,8 @@ Person::Person(
 	const string& firstNameString,
 	const string& middleNameString,
 	const string& lastNameString,
-	const string& birthdayString)
+	const string& birthdayString,
+	const string& phoneString)
 {
 	firstName = firstNameString;
 	lastName = lastNameString;
@@ -22,6 +23,8 @@ Person::Person(
 	struct std::tm birthday_tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	(istringstream(birthdayString)) >> std::get_time(&birthday_tm, "%Y-%m-%d");
 	birthday = mktime(&birthday_tm);
+
+	phone = phoneString;
 }
 
 string Person::getFirstName() const {
@@ -47,3 +50,12 @@ ostream& operator<<(ostream& out, const Person& person)
 	return out;
 }
 
+
+std::time_t readDate(const string& dateString) {
+	struct std::tm date = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	(istringstream(dateString)) >> std::get_time(&date, "%Y-%m-%d");
+
+	//if()
+
+	return mktime(&date);
+}

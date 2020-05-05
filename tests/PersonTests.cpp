@@ -4,7 +4,8 @@
 
 namespace PersonTesting {
 
-	Person person("Anna", "Mary", "Smith", "2001-01-01");
+	Person person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00");
+
 	TEST(Person, HasFirstName) {
 		EXPECT_EQ(person.getFirstName(), "Anna");
 	}
@@ -27,14 +28,33 @@ namespace PersonTesting {
 	}
 
 	TEST(Person, Equality) {
-		EXPECT_EQ(* new Person("Anna", "Mary", "Smith", "2001-01-01"), * new Person("Anna", "Mary", "Smith", "2001-01-01"));
+		EXPECT_EQ( 
+			Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"), 
+			Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"));
 	}
 
 	TEST(Person, Inequality) {
-		EXPECT_NE(*new Person("Anna", "Mary", "Smith", "2001-01-01"), *new Person("Anna", "Mary", "Smith_", "2001-01-01"));
-		EXPECT_NE(*new Person("Anna", "Mary", "Smith", "2001-01-01"), *new Person("Anna", "Mary_", "Smith", "2001-01-01"));
-		EXPECT_NE(*new Person("Anna", "Mary", "Smith", "2001-01-01"), *new Person("Anna_", "Mary", "Smith", "2001-01-01"));
-		EXPECT_NE(*new Person("Anna", "Mary", "Smith", "2001-01-01"), *new Person("Anna", "Mary", "Smith", "2001-01-02"));
+		EXPECT_NE(
+			*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"),
+			*new Person("Anna", "Mary", "Smith_", "2001-01-01", "+9 876 543 21 00"));
+		EXPECT_NE(
+			*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"),
+			*new Person("Anna", "Mary_", "Smith", "2001-01-01", "+9 876 543 21 00"));
+		EXPECT_NE(
+			*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"),
+			*new Person("Anna_", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"));
+		EXPECT_NE(
+			*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"), 
+			*new Person("Anna", "Mary", "Smith", "2001-01-02", "+9 876 543 21 00"));
+		EXPECT_NE(
+			*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"),
+			*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 01"));
+
+		EXPECT_NE(
+			*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"),
+			*new Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 00"));
+
+
 	}
 
 	//TEST(Person, ReadsItself) {
