@@ -25,15 +25,17 @@ public:
 
 	time_t getBirthday() const;
 
-	//bool operator==(const Person&) const;
-	auto operator<=>(const Person&) const = default;
+	bool operator==(const Person&) const;
+	friend bool operator<(const Person&, const Person&);
+
+	//std::strong_ordering operator<=>(const Person&) const;
 
 	friend ostream& operator<<(ostream& out, const Person& person);
 
 private:
+	string lastName;
 	string firstName;
 	string middleName;
-	string lastName;
 	std::time_t birthday;
 	string phone;
 };

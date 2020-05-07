@@ -46,10 +46,47 @@ time_t Person::getBirthday() const
 	return birthday;
 }
 
-//bool Person::operator==(const Person&) const {
-//	return
-//		lastNa
+
+bool Person::operator==(const Person& another) const {
+	return
+		lastName == another.lastName
+		&& firstName == another.firstName
+		&& middleName == another.middleName
+		&& birthday == another.birthday;
+}
+
+bool operator<(const Person& a, const Person& another) {
+	if (a.lastName < another.lastName) return true;
+	if (a.lastName > another.lastName) return false;
+
+	if (a.firstName < another.firstName) return true;
+	if (a.firstName > another.firstName) return false;
+
+	if (a.middleName < another.middleName) return true;
+	if (a.middleName > another.middleName) return false;
+
+	return a.birthday > another.birthday;
+}
+
+
+//constexpr bool _Less(const tuple<_Other...>& _Right) const {
+//	return _Myfirst._Val < _Right._Myfirst._Val
+//		|| (!(_Right._Myfirst._Val < _Myfirst._Val) && _Mybase::_Less(_Right._Get_rest()));
 //}
+
+//std::strong_ordering Person::operator<=>(const Person& that) const {
+//	auto cmp1 = birthday <=> that.birthday;
+//	tuple s("abc");
+//
+//	if (std::strong_ordering cmp = lastName <=> that.lastName; cmp != 0) {
+//		return cmp; 
+//	}
+//	if (auto cmp = firstName <=> that.firstName; cmp != 0) {
+//		return cmp;
+//	}
+//	return tax_id <=> that.tax_id;
+//}
+
 
 ostream& operator<<(ostream& out, const Person& person)
 {
