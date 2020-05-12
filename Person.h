@@ -10,6 +10,8 @@ class Person
 {
 public:
 
+	Person();
+
 	Person(
 		const string& firstNameString, 
 		const string& middleNameString, 
@@ -28,15 +30,14 @@ public:
 	bool operator==(const Person&) const;
 	friend bool operator<(const Person&, const Person&);
 
-	//std::strong_ordering operator<=>(const Person&) const;
-
 	friend ostream& operator<<(ostream& out, const Person& person);
+	friend istream& operator>>(istream& out, Person& person);
 
 private:
 	string lastName;
 	string firstName;
 	string middleName;
-	std::time_t birthday;
+	time_t birthday;
 	string phone;
 };
 

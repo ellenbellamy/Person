@@ -10,13 +10,20 @@
 
 std::time_t readDate(const string&);
 
+Person::Person() {
+	lastName = "";
+	firstName = "";
+	middleName = "";
+	birthday = -1;
+	phone = "";
+}
+
 Person::Person(
 	const string& firstNameString,
 	const string& middleNameString,
 	const string& lastNameString,
 	const string& birthdayString,
-	const string& phoneString)
-{
+	const string& phoneString) {
 	firstName = firstNameString;
 	lastName = lastNameString;
 	middleName = middleNameString;
@@ -68,32 +75,33 @@ bool operator<(const Person& a, const Person& another) {
 	return a.birthday > another.birthday;
 }
 
-
-//constexpr bool _Less(const tuple<_Other...>& _Right) const {
-//	return _Myfirst._Val < _Right._Myfirst._Val
-//		|| (!(_Right._Myfirst._Val < _Myfirst._Val) && _Mybase::_Less(_Right._Get_rest()));
-//}
-
-//std::strong_ordering Person::operator<=>(const Person& that) const {
-//	auto cmp1 = birthday <=> that.birthday;
-//	tuple s("abc");
-//
-//	if (std::strong_ordering cmp = lastName <=> that.lastName; cmp != 0) {
-//		return cmp; 
-//	}
-//	if (auto cmp = firstName <=> that.firstName; cmp != 0) {
-//		return cmp;
-//	}
-//	return tax_id <=> that.tax_id;
-//}
-
+const unsigned char delimiter = ' ';
 
 ostream& operator<<(ostream& out, const Person& person)
 {
-	out << person.firstName << " " << person.middleName << " " << person.lastName;
-	return out;
+	return out
+		<< person.firstName << delimiter
+		<< person.middleName << delimiter
+		<< person.lastName << delimiter
+		<< person.birthday << delimiter
+		<< person.phone;
 }
 
+istream& operator>>(istream& in, Person& person)
+{
+	//string buffer; 
+	//in >> buffer;
+
+	//istringstream iss(buffer);
+
+	in >> person.firstName //>> skip
+		>> person.middleName //>> skip
+		>> person.lastName //>> skip
+		>> person.birthday //>> skip
+		>> person.phone;
+
+	return in;
+}
 
 std::time_t readDate(const string& dateString) {
 	struct std::tm date = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
