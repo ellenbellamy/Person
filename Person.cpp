@@ -8,7 +8,6 @@
 #include <ctime>
 #include <iomanip>
 
-std::time_t readDate(const string&);
 
 Person::Person() {
 	lastName = "";
@@ -27,13 +26,18 @@ Person::Person(
 	firstName = firstNameString;
 	lastName = lastNameString;
 	middleName = middleNameString;
-
-	//struct std::tm birthday_tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	//(istringstream(birthdayString)) >> std::get_time(&birthday_tm, "%Y-%m-%d");
-	//birthday = mktime(&birthday_tm);
 	birthday = readDate(birthdayString);
-
 	phone = phoneString;
+}
+
+Person::Person(const Person& aPerson) {
+	firstName = aPerson.firstName;
+	lastName = aPerson.lastName;
+	middleName = aPerson.middleName;
+
+	birthday = aPerson.birthday;
+
+	phone = aPerson.phone;
 }
 
 string Person::getFirstName() const {
@@ -103,11 +107,28 @@ istream& operator>>(istream& in, Person& person)
 	return in;
 }
 
-std::time_t readDate(const string& dateString) {
-	struct std::tm date = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+Person& Person::operator=(const Person& aPerson) {
+	firstName = aPerson.firstName;
+	lastName = aPerson.lastName;
+	middleName = aPerson.middleName;
+	birthday = aPerson.birthday;
+	phone = aPerson.phone;
+	return *this;
+}
+
+int Person::daysUntilBirthday(const time_t& dateAndTime) {
+	time_t dateOnly = dateAndTime - dateAndTime % (60L * 60 * 24);
+
+	//tm * tm = localtime(&dateOnly);
+
+	return difftime(birthday, dateOnly) / (60L * 60 * 24);
+}
+
+time_t readDate(const string& dateString) {
+	struct tm date = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	istringstream ss = istringstream(dateString);
-	ss >> std::get_time(&date, "%Y-%m-%d");
+	ss >> get_time(&date, "%Y-%m-%d");
 
 	if (ss.fail()) {
 		throw WrongDateFormat();

@@ -19,6 +19,8 @@ public:
 		const string& birthdayString,
 		const string& phoneString);
 
+	Person(const Person&);
+
 	string getFirstName() const;
 
 	string getLastName() const;
@@ -33,11 +35,20 @@ public:
 	friend ostream& operator<<(ostream& out, const Person& person);
 	friend istream& operator>>(istream& out, Person& person);
 
+	Person& operator=(const Person& another);
+
+	int daysUntilBirthday(const time_t& date);
+
+	int daysUntilBirthday() {
+		return this->daysUntilBirthday(time(NULL));
+	};
+
 private:
 	string lastName;
 	string firstName;
 	string middleName;
 	time_t birthday;
+	//tm birthday;
 	string phone;
 };
 
@@ -47,3 +58,4 @@ struct WrongDateFormat : public exception {
 	//}
 };
 
+time_t readDate(const string&);
