@@ -95,15 +95,15 @@ namespace PersonTesting {
 	}
 
 	TEST(Person, DaysUntilBirthday) {
-		EXPECT_EQ(person.daysUntilBirthday(person.getBirthday()), 0);
-		EXPECT_EQ(person.daysUntilBirthday(readDate("2000-12-31")), 1);
-		EXPECT_EQ(person.daysUntilBirthday(readDate("2000-12-30")), 2);
-		EXPECT_EQ(person.daysUntilBirthday(readDate("2000-01-02")), 365);
+		EXPECT_EQ(person.daysUntilBirthday(person.getBirthdayTm()), 0);
+		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-12-31")), 1);
+		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-12-30")), 2);
+		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-01-02")), 365);
 
-		EXPECT_EQ(person.daysUntilBirthday(readDate("2000-12-31") + 1), 1);
-		EXPECT_EQ(person.daysUntilBirthday(readDate("2000-12-31") + 24 * 60 * 60), 0);
+		EXPECT_EQ(person.daysUntilBirthday(convertTime(readDate("2000-12-31") + 1)), 1);
+		EXPECT_EQ(person.daysUntilBirthday(convertTime(readDate("2000-12-31") + 24 * 60 * 60)), 0);
 
-		EXPECT_EQ(person.daysUntilBirthday(readDate("2002-01-01")), 0);
+		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2002-01-01")), 0);
 		//EXPECT_EQ(person.daysUntilBirthday(readDate("2001-12-31")), 1);
 	}
 

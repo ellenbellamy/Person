@@ -13,7 +13,8 @@ Person::Person() {
 	lastName = "";
 	firstName = "";
 	middleName = "";
-	birthday = -1;
+	birthdayTm = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	birthday = 0;
 	phone = "";
 }
 
@@ -26,7 +27,8 @@ Person::Person(
 	firstName = firstNameString;
 	lastName = lastNameString;
 	middleName = middleNameString;
-	birthday = readDate(birthdayString);
+	birthdayTm = readDateTm(birthdayString);
+	birthday = mktime(&birthdayTm);
 	phone = phoneString;
 }
 
@@ -36,6 +38,7 @@ Person::Person(const Person& aPerson) {
 	middleName = aPerson.middleName;
 
 	birthday = aPerson.birthday;
+	birthdayTm = aPerson.birthdayTm;  // Copy???
 
 	phone = aPerson.phone;
 }
@@ -52,11 +55,13 @@ string Person::getMiddleName() const {
 	return middleName;
 }
 
-time_t Person::getBirthday() const
-{
+time_t Person::getBirthday() const {
 	return birthday;
 }
 
+tm Person::getBirthdayTm() const {
+	return birthdayTm;
+}
 
 bool Person::operator==(const Person& another) const {
 	return
@@ -66,17 +71,17 @@ bool Person::operator==(const Person& another) const {
 		&& birthday == another.birthday;
 }
 
-bool operator<(const Person& a, const Person& another) {
-	if (a.lastName < another.lastName) return true;
-	if (a.lastName > another.lastName) return false;
+bool operator<(const Person& left, const Person& right) {
+	if (left.lastName < right.lastName) return true;
+	if (left.lastName > right.lastName) return false;
 
-	if (a.firstName < another.firstName) return true;
-	if (a.firstName > another.firstName) return false;
+	if (left.firstName < right.firstName) return true;
+	if (left.firstName > right.firstName) return false;
 
-	if (a.middleName < another.middleName) return true;
-	if (a.middleName > another.middleName) return false;
+	if (left.middleName < right.middleName) return true;
+	if (left.middleName > right.middleName) return false;
 
-	return a.birthday > another.birthday;
+	return left.birthday > right.birthday;
 }
 
 const unsigned char delimiter = ' ';
@@ -104,6 +109,8 @@ istream& operator>>(istream& in, Person& person)
 		>> person.birthday //>> skip
 		>> person.phone;
 
+	person.birthdayTm = convertTime(person.birthday);
+
 	return in;
 }
 
@@ -112,11 +119,14 @@ Person& Person::operator=(const Person& aPerson) {
 	lastName = aPerson.lastName;
 	middleName = aPerson.middleName;
 	birthday = aPerson.birthday;
+	birthdayTm = aPerson.birthdayTm;
 	phone = aPerson.phone;
 	return *this;
 }
 
-int Person::daysUntilBirthday(const time_t& dateAndTime) {
+int Person::daysUntilBirthday(tm& tm) const {
+	time_t dateAndTime = mktime(&tm);
+
 	time_t dateOnly = dateAndTime - dateAndTime % (60L * 60 * 24);
 
 	//tm * tm = localtime(&dateOnly);
@@ -124,7 +134,7 @@ int Person::daysUntilBirthday(const time_t& dateAndTime) {
 	return difftime(birthday, dateOnly) / (60L * 60 * 24);
 }
 
-time_t readDate(const string& dateString) {
+tm readDateTm(const string& dateString) {
 	struct tm date = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	istringstream ss = istringstream(dateString);
@@ -134,6 +144,15 @@ time_t readDate(const string& dateString) {
 		throw WrongDateFormat();
 	}
 
-	time_t t = mktime(&date);
-	return t;
+	return date;
+}
+
+time_t readDate(const string& dateString) {
+	return  mktime(&readDateTm(dateString));
+}
+
+tm convertTime(time_t t) {
+	tm tm;
+	localtime_s(&tm, &t);
+	return tm;
 }

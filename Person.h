@@ -13,8 +13,8 @@ public:
 	Person();
 
 	Person(
-		const string& firstNameString, 
-		const string& middleNameString, 
+		const string& firstNameString,
+		const string& middleNameString,
 		const string& lastNameString,
 		const string& birthdayString,
 		const string& phoneString);
@@ -28,6 +28,8 @@ public:
 	string getMiddleName() const;
 
 	time_t getBirthday() const;
+	tm getBirthdayTm() const;
+
 
 	bool operator==(const Person&) const;
 	friend bool operator<(const Person&, const Person&);
@@ -37,18 +39,20 @@ public:
 
 	Person& operator=(const Person& another);
 
-	int daysUntilBirthday(const time_t& date);
+	int daysUntilBirthday(tm&) const;
 
-	int daysUntilBirthday() {
-		return this->daysUntilBirthday(time(NULL));
-	};
+	//int daysUntilBirthday() {
+	//	return this->daysUntilBirthday(time(NULL));
+	//};
 
 private:
 	string lastName;
 	string firstName;
 	string middleName;
+
 	time_t birthday;
-	//tm birthday;
+	tm birthdayTm;
+
 	string phone;
 };
 
@@ -58,4 +62,7 @@ struct WrongDateFormat : public exception {
 	//}
 };
 
+tm readDateTm(const string&);
 time_t readDate(const string&);
+
+tm convertTime(time_t);
