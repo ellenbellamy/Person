@@ -26,13 +26,17 @@ Person::Person(
 	const optional<string>& birthdayStringOrNull,
 	const optional<string>& phoneStringOrNull) {
 	firstName = firstNameStringOrNull;
-	lastName = lastNameStringOrNull.has_value() ? lastNameStringOrNull.value() : NULL;
-	middleName = middleNameStringOrNull.has_value() ? middleNameStringOrNull.value() : NULL;
+	lastName = lastNameStringOrNull;
+	middleName = middleNameStringOrNull;
 	if (birthdayStringOrNull.has_value()) {
 		birthdayTm = readDateTm(birthdayStringOrNull.value());
-		birthday = mktime(&birthdayTm);
+		birthday = mktime(&birthdayTm.value());
 	}
-	phone = phoneStringOrNull.has_value() ? phoneStringOrNull.value() : NULL;
+	else {
+		birthdayTm = nullopt;
+		birthday = nullopt;
+	}
+	phone = phoneStringOrNull;
 }
 
 
@@ -53,27 +57,31 @@ string Person::getFirstName() const {
 }
 
 string Person::getLastName() const {
-	return lastName;
+	return lastName.value();
 }
 
 string Person::getMiddleName() const {
-	return middleName;
+	return middleName.value();
 }
 
 time_t Person::getBirthday() const {
-	return birthday;
+	return birthday.value();
 }
 
 tm Person::getBirthdayTm() const {
-	return birthdayTm;
+	return birthdayTm.value();
+}
+
+string Person::getPhone() const {
+	return phone.value();
 }
 
 bool Person::operator==(const Person& another) const {
 	return
-		lastName == another.lastName
-		&& firstName == another.firstName
-		&& middleName == another.middleName
-		&& birthday == another.birthday;
+		(lastName == another.lastName)
+		&& (firstName == another.firstName)
+		&& (middleName == another.middleName)
+		&& (birthday == another.birthday);
 }
 
 bool operator<(const Person& left, const Person& right) {
@@ -95,10 +103,10 @@ ostream& operator<<(ostream& out, const Person& person)
 {
 	return out
 		<< person.getFirstName() << delimiter
-		<< person.middleName << delimiter
-		<< person.lastName << delimiter
-		<< person.birthday << delimiter
-		<< person.phone;
+		<< person.getMiddleName() << delimiter
+		<< person.getLastName() << delimiter
+		<< person.getBirthday() << delimiter
+		<< person.getPhone();
 }
 
 istream& operator>>(istream& in, Person& person)
@@ -107,17 +115,25 @@ istream& operator>>(istream& in, Person& person)
 	//in >> buffer;
 
 	//istringstream iss(buffer);
-	string fn; 
+	string fn;
+	string mn;
+	string ln;
+	time_t b;
+	string p;
 
-	in >> fn //>> skip
-		>> person.middleName //>> skip
-		>> person.lastName //>> skip
-		>> person.birthday //>> skip
-		>> person.phone;
+	in >> fn
+		>> mn
+		>> ln
+		>> b
+		>> p;
 
 	person.firstName = fn;
+	person.middleName = mn;
+	person.lastName = ln;
+	person.birthday = b;
+	person.phone = p;
 
-	person.birthdayTm = convertTime(person.birthday);
+	person.birthdayTm = convertTime(person.birthday.value());
 
 	return in;
 }
@@ -136,7 +152,7 @@ int Person::daysUntilBirthday(tm& tm) const {
 	time_t dateAndTime = mktime(&tm);
 	time_t dateOnly = dateAndTime - dateAndTime % (60 * 60 * 24);
 
-	struct tm nextBirthdayTm = birthdayTm;
+	struct tm nextBirthdayTm = birthdayTm.value();
 
 	nextBirthdayTm.tm_year = tm.tm_year;
 	time_t nextBirthday = mktime(&nextBirthdayTm);
@@ -151,11 +167,11 @@ int Person::daysUntilBirthday(tm& tm) const {
 
 bool Person::check(const Person& condition) const {
 	return
-		lastName == condition.lastName
-		&& condition.firstName.has_value() ? condition.firstName.value() == firstName.value() : true
-		&& middleName == condition.middleName
-		&& birthday == condition.birthday
-		&& phone == condition.phone;
+		(condition.lastName.has_value() ? condition.lastName.value() == lastName.value() : true)
+		&& (condition.firstName.has_value() ? condition.firstName.value() == firstName.value() : true)
+		&& (condition.middleName.has_value() ? condition.middleName.value() == middleName.value() : true)
+		&& (condition.birthday.has_value() ? condition.birthday.value() == birthday.value() : true)
+		&& (condition.phone.has_value() ? condition.phone.value() == phone.value() : true);
 }
 
 

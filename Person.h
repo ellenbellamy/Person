@@ -31,6 +31,7 @@ public:
 	time_t getBirthday() const;
 	tm getBirthdayTm() const;
 
+	string getPhone() const;
 
 	bool operator==(const Person&) const;
 	friend bool operator<(const Person&, const Person&);

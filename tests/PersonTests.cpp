@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "../Person.h"
-#include <ctime>
 
 namespace PersonTesting {
 	Person person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100");
@@ -113,23 +112,23 @@ namespace PersonTesting {
 	}
 
 	TEST(Person, Check) {
-		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
+		EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
 
-		//EXPECT_FALSE(person.check(Person("Anna_", "Mary", "Smith", "2001-01-01", "+98765432100")));
-		//EXPECT_FALSE(person.check(Person("Anna", "Mary_", "Smith", "2001-01-01", "+98765432100")));
-		//EXPECT_FALSE(person.check(Person("Anna", "Mary", "Smith_", "2001-01-01", "+98765432100")));
-		//EXPECT_FALSE(person.check(Person("Anna", "Mary", "Smith", "2001-01-02", "+98765432100")));
-		//EXPECT_FALSE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432101")));
+		EXPECT_FALSE(person.check(Person("Anna_", "Mary", "Smith", "2001-01-01", "+98765432100")));
+		EXPECT_FALSE(person.check(Person("Anna", "Mary_", "Smith", "2001-01-01", "+98765432100")));
+		EXPECT_FALSE(person.check(Person("Anna", "Mary", "Smith_", "2001-01-01", "+98765432100")));
+		EXPECT_FALSE(person.check(Person("Anna", "Mary", "Smith", "2001-01-02", "+98765432100")));
+		EXPECT_FALSE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432101")));
 
 		EXPECT_TRUE(person.check(Person({}, "Mary", "Smith", "2001-01-01", "+98765432100")));
-		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
-		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
-		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
-		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
-		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
-		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
-		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
-		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
+		EXPECT_TRUE(person.check(Person("Anna", {}, "Smith", "2001-01-01", "+98765432100")));
+		EXPECT_TRUE(person.check(Person("Anna", "Mary", {}, "2001-01-01", "+98765432100")));
+		EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", {}, "+98765432100")));
+		EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", {})));
+		EXPECT_TRUE(person.check(Person({}, "Mary", "Smith", "2001-01-01", {})));
+		EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
+		EXPECT_TRUE(person.check(Person("Anna", {}, {}, {}, "+98765432100")));
+		EXPECT_TRUE(person.check(Person({}, {}, {}, {}, {})));
 	}
 
 /*
