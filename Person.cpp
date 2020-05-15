@@ -9,9 +9,10 @@
 #include <iomanip>
 
 
+
 Person::Person() {
 	lastName = "";
-	firstName = "";
+	firstName = std::nullopt;
 	middleName = "";
 	birthdayTm = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	birthday = 0;
@@ -19,18 +20,22 @@ Person::Person() {
 }
 
 Person::Person(
-	const string& firstNameString,
-	const string& middleNameString,
-	const string& lastNameString,
-	const string& birthdayString,
-	const string& phoneString) {
-	firstName = firstNameString;
-	lastName = lastNameString;
-	middleName = middleNameString;
-	birthdayTm = readDateTm(birthdayString);
-	birthday = mktime(&birthdayTm);
-	phone = phoneString;
+	const optional<string>& firstNameStringOrNull,
+	const optional<string>& middleNameStringOrNull,
+	const optional<string>& lastNameStringOrNull,
+	const optional<string>& birthdayStringOrNull,
+	const optional<string>& phoneStringOrNull) {
+	firstName = firstNameStringOrNull;
+	lastName = lastNameStringOrNull.has_value() ? lastNameStringOrNull.value() : NULL;
+	middleName = middleNameStringOrNull.has_value() ? middleNameStringOrNull.value() : NULL;
+	if (birthdayStringOrNull.has_value()) {
+		birthdayTm = readDateTm(birthdayStringOrNull.value());
+		birthday = mktime(&birthdayTm);
+	}
+	phone = phoneStringOrNull.has_value() ? phoneStringOrNull.value() : NULL;
 }
+
+
 
 Person::Person(const Person& aPerson) {
 	firstName = aPerson.firstName;
@@ -44,7 +49,7 @@ Person::Person(const Person& aPerson) {
 }
 
 string Person::getFirstName() const {
-	return firstName;
+	return firstName.has_value() ? firstName.value() : "";
 }
 
 string Person::getLastName() const {
@@ -89,7 +94,7 @@ const unsigned char delimiter = ' ';
 ostream& operator<<(ostream& out, const Person& person)
 {
 	return out
-		<< person.firstName << delimiter
+		<< person.getFirstName() << delimiter
 		<< person.middleName << delimiter
 		<< person.lastName << delimiter
 		<< person.birthday << delimiter
@@ -102,12 +107,15 @@ istream& operator>>(istream& in, Person& person)
 	//in >> buffer;
 
 	//istringstream iss(buffer);
+	string fn; 
 
-	in >> person.firstName //>> skip
+	in >> fn //>> skip
 		>> person.middleName //>> skip
 		>> person.lastName //>> skip
 		>> person.birthday //>> skip
 		>> person.phone;
+
+	person.firstName = fn;
 
 	person.birthdayTm = convertTime(person.birthday);
 
@@ -126,13 +134,30 @@ Person& Person::operator=(const Person& aPerson) {
 
 int Person::daysUntilBirthday(tm& tm) const {
 	time_t dateAndTime = mktime(&tm);
+	time_t dateOnly = dateAndTime - dateAndTime % (60 * 60 * 24);
 
-	time_t dateOnly = dateAndTime - dateAndTime % (60L * 60 * 24);
+	struct tm nextBirthdayTm = birthdayTm;
 
-	//tm * tm = localtime(&dateOnly);
+	nextBirthdayTm.tm_year = tm.tm_year;
+	time_t nextBirthday = mktime(&nextBirthdayTm);
 
-	return difftime(birthday, dateOnly) / (60L * 60 * 24);
+	if (nextBirthday < dateOnly) {
+		nextBirthdayTm.tm_year += 1;
+		nextBirthday = mktime(&nextBirthdayTm);
+	}
+
+	return difftime(nextBirthday, dateOnly) / ((double)60 * 60 * 24);
 }
+
+bool Person::check(const Person& condition) const {
+	return
+		lastName == condition.lastName
+		&& condition.firstName.has_value() ? condition.firstName.value() == firstName.value() : true
+		&& middleName == condition.middleName
+		&& birthday == condition.birthday
+		&& phone == condition.phone;
+}
+
 
 tm readDateTm(const string& dateString) {
 	struct tm date = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };

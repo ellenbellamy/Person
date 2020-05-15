@@ -3,6 +3,7 @@
 #include <string>
 #include <compare>
 #include <ctime>
+#include <optional>
 
 using namespace std;
 
@@ -13,11 +14,11 @@ public:
 	Person();
 
 	Person(
-		const string& firstNameString,
-		const string& middleNameString,
-		const string& lastNameString,
-		const string& birthdayString,
-		const string& phoneString);
+		const optional<string>& firstNameStringOrNull,
+		const optional<string>& middleNameStringOrNull,
+		const optional<string>& lastNameStringOrNull,
+		const optional<string>& birthdayStringOrNull,
+		const optional<string>& phoneStringOrNull);
 
 	Person(const Person&);
 
@@ -45,15 +46,17 @@ public:
 	//	return this->daysUntilBirthday(time(NULL));
 	//};
 
+	bool check(const Person&) const;
+
 private:
-	string lastName;
-	string firstName;
-	string middleName;
+	optional<string> lastName;
+	optional<string> firstName;
+	optional<string> middleName;
 
-	time_t birthday;
-	tm birthdayTm;
+	optional<time_t> birthday;
+	optional<tm> birthdayTm;
 
-	string phone;
+	optional<string> phone;
 };
 
 struct WrongDateFormat : public exception {

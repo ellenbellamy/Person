@@ -95,7 +95,7 @@ namespace PersonTesting {
 	}
 
 	TEST(Person, DaysUntilBirthday) {
-		EXPECT_EQ(person.daysUntilBirthday(person.getBirthdayTm()), 0);
+		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2001-01-01")), 0);
 		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-12-31")), 1);
 		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-12-30")), 2);
 		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-01-02")), 365);
@@ -104,12 +104,33 @@ namespace PersonTesting {
 		EXPECT_EQ(person.daysUntilBirthday(convertTime(readDate("2000-12-31") + 24 * 60 * 60)), 0);
 
 		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2002-01-01")), 0);
-		//EXPECT_EQ(person.daysUntilBirthday(readDate("2001-12-31")), 1);
+		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2001-12-31")), 1);
+
+		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-01-01")), 0);
+		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-12-31")), 1);
+		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-12-30")), 2);
+		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-01-02")), 365);
 	}
 
-	//check - проверка на соответствие элемента условиям
-	//daysBeforeBirthday - сколько дней до даты рождения
+	TEST(Person, Check) {
+		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
 
+		//EXPECT_FALSE(person.check(Person("Anna_", "Mary", "Smith", "2001-01-01", "+98765432100")));
+		//EXPECT_FALSE(person.check(Person("Anna", "Mary_", "Smith", "2001-01-01", "+98765432100")));
+		//EXPECT_FALSE(person.check(Person("Anna", "Mary", "Smith_", "2001-01-01", "+98765432100")));
+		//EXPECT_FALSE(person.check(Person("Anna", "Mary", "Smith", "2001-01-02", "+98765432100")));
+		//EXPECT_FALSE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432101")));
+
+		EXPECT_TRUE(person.check(Person({}, "Mary", "Smith", "2001-01-01", "+98765432100")));
+		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
+		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
+		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
+		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
+		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
+		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
+		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
+		//EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
+	}
 
 /*
 
