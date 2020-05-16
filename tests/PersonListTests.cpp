@@ -2,16 +2,75 @@
 #include "../PersonList.h"
 
 namespace PersonListTesting {
-	//Person person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100");
 
-	TEST(PersonList, IsEmptyOnCreation) {
+	class PersonListTests : public ::testing::Test
+	{
+	protected:
+		PersonList persons;
+
+		void TearDown() {
+			persons.clear();
+		}
+	};
+
+	TEST_F(PersonListTests, IsEmptyOnCreation) {
 		EXPECT_TRUE(PersonList().isEmpty());
 	}
 
-	TEST(PersonList, Adding) {
-		PersonList list= PersonList();
-		list.add(Person());
-		EXPECT_FALSE(list.isEmpty());
+	TEST_F(PersonListTests, AddingElement) {
+		persons.add(Person());
+
+		EXPECT_FALSE(persons.isEmpty());
+	}
+
+	TEST_F(PersonListTests, Sorting) {
+		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("777", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
+
+
+		persons.sort();
+
+		list<Person>::iterator current = persons.begin();
+
+		EXPECT_TRUE(persons.isSorted());
+	}
+
+	TEST_F(PersonListTests, AddingList) {
+		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
+
+		PersonList anotherPerson;
+		anotherPerson.add(Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		anotherPerson.add(Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		anotherPerson.add(Person("888", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		anotherPerson.add(Person("777", "Mary", "Smith", "2001-01-01", "+98765432100"));
+
+		persons.addAll(anotherPerson);
+
+		EXPECT_EQ(persons.size(), 7);
+	}
+
+	TEST_F(PersonListTests, AddingSortedList) {
+		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("888", "Mary", "Smith", "2001-01-01", "+98765432100"));
+
+		PersonList anotherPerson;
+		anotherPerson.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		anotherPerson.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		anotherPerson.add(Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		anotherPerson.add(Person("777", "Mary", "Smith", "2001-01-01", "+98765432100"));
+
+		persons.merge(anotherPerson);
+
+		EXPECT_EQ(persons.size(), 7);
+		EXPECT_TRUE(persons.isSorted());
 	}
 
 	/*
@@ -24,15 +83,22 @@ namespace PersonListTesting {
 		- operator=
 		- operator>> - прочитать список из потока ввода
 		- operator<< - вывести список в поток вывода
-		- add - добавить элемент в конец списка
-		- sort - отсортировать
-		- addSort - добавить в отсортированный список с сохранением пор€дка сортировки
-		- addList - слить вместе 2 списка.
+
+		+ add - добавить элемент в конец списка
+		+ sort - отсортировать
+
+		+ addSort - добавить в отсортированный список с сохранением пор€дка сортировки
+		+ addList - слить вместе 2 списка.
+
 		- write - вывести на экран элементы, удовлетвор€ющие услови€м
+
 		- remove - удалить элементы, удовлетвор€ющие услови€м
 
-		» специальный метод дл€ каждого варианта :
-		0 вариант : getBirthday - определ€ет ближайший день рождени€ и сколько до него осталось дней
+		- getBirthday - определ€ет ближайший день рождени€ и сколько до него осталось дней
+
+
+
+
 
 		ќпределить в функции main интерпретатор командной строки, реализующий команды :
 		- help - вывести на экран список команд
