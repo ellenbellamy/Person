@@ -45,6 +45,18 @@ void PersonList::merge(PersonList& anotherList)
 	list.merge(anotherList.list);
 }
 
+Person PersonList::nextCelebrant(tm& timestamp) const
+{
+	pair<std::list<Person>::const_iterator, int> nextCelebrant(list.begin(), list.begin()->daysUntilBirthday(timestamp));
+	for (std::list<Person>::const_iterator i = list.begin(); i != list.end(); i++) {
+		int d = i->daysUntilBirthday(timestamp);
+		if (d < nextCelebrant.second) {
+			nextCelebrant = make_pair(i, d);
+		}
+	}
+	return *nextCelebrant.first;
+}
+
 void PersonList::clear()
 {
 	list.clear();

@@ -28,6 +28,8 @@ public:
 	void addAll(PersonList&);
 	void merge(PersonList&);
 
+	Person nextCelebrant(tm&) const;
+
 protected:
 	list<Person> list;
 };
