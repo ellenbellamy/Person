@@ -83,7 +83,7 @@ namespace PersonListTesting {
 				Person("333", "Mary", "Smith", "2001-09-09", "+98765432100"),
 				Person("444", "Mary", "Smith", "2001-09-13", "+98765432100"),
 				Person("555", "Mary", "Smith", "2001-09-19", "+98765432100"),
-				Person("777", "Mary", "Smith", "2001-09-27", "+98765432100") 
+				Person("777", "Mary", "Smith", "2001-09-27", "+98765432100")
 		};
 
 		vector<Person> shuffledPersons(indexedPersons.size());
@@ -94,17 +94,14 @@ namespace PersonListTesting {
 			persons.add(person);
 		}
 
-		EXPECT_EQ(persons.nextCelebrant(readDateTm("2001-01-01")), indexedPersons[0]);
-		EXPECT_EQ(persons.nextCelebrant(readDateTm("2020-01-01")), indexedPersons[0]);
+		EXPECT_TRUE((persons.nextCelebrant(readDateTm("2001-01-01"))) == (tuple<Person, time_t, int>(indexedPersons[0], 219, indexedPersons[0].getBirthday())));
+		EXPECT_TRUE((persons.nextCelebrant(readDateTm("2020-08-09"))) == (tuple<Person, time_t, int>(indexedPersons[1], 2, indexedPersons[1].getBirthday())));
+		EXPECT_TRUE((persons.nextCelebrant(readDateTm("2020-08-11"))) == (tuple<Person, time_t, int>(indexedPersons[1], 0, indexedPersons[1].getBirthday())));
 
-		EXPECT_EQ(persons.nextCelebrant(readDateTm("2020-08-09")), indexedPersons[1]);
-		EXPECT_EQ(persons.nextCelebrant(readDateTm("2020-08-11")), indexedPersons[1]);
-
-		EXPECT_EQ(persons.nextCelebrant(readDateTm("2020-08-12")), indexedPersons[2]);
-		EXPECT_EQ(persons.nextCelebrant(readDateTm("2020-09-12")), indexedPersons[3]);
-		EXPECT_EQ(persons.nextCelebrant(readDateTm("2020-09-20")), indexedPersons[5]);
-		EXPECT_EQ(persons.nextCelebrant(readDateTm("2020-09-28")), indexedPersons[0]);
-
+		EXPECT_TRUE((persons.nextCelebrant(readDateTm("2020-08-12"))) == (tuple<Person, time_t, int>(indexedPersons[2], 28, indexedPersons[2].getBirthday())));
+		EXPECT_TRUE((persons.nextCelebrant(readDateTm("2020-09-12"))) == (tuple<Person, time_t, int>(indexedPersons[3], 1, indexedPersons[3].getBirthday())));
+		EXPECT_TRUE((persons.nextCelebrant(readDateTm("2020-09-20"))) == (tuple<Person, time_t, int>(indexedPersons[5], 7, indexedPersons[5].getBirthday())));
+		EXPECT_TRUE((persons.nextCelebrant(readDateTm("2020-09-28"))) == (tuple<Person, time_t, int>(indexedPersons[0], 314, indexedPersons[0].getBirthday())));
 	}
 
 
@@ -131,7 +128,7 @@ namespace PersonListTesting {
 
 		- remove - удалить элементы, удовлетворяющие условиям
 
-		- getBirthday - определяет ближайший день рождения и сколько до него осталось дней
+		+ getBirthday - определяет ближайший день рождения и сколько до него осталось дней
 
 
 

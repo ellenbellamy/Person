@@ -28,7 +28,9 @@ public:
 	void addAll(PersonList&);
 	void merge(PersonList&);
 
-	Person nextCelebrant(tm&) const;
+	//typedef tuple<Person, time_t, int> NextCelebrant;
+	//NextCelebrant nextCelebrant(tm&) const;
+	tuple<Person, time_t, int> nextCelebrant(tm&) const;
 
 protected:
 	list<Person> list;
