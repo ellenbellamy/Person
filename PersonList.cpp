@@ -1,5 +1,6 @@
 #include "PersonList.h"
 #include <algorithm>
+#include <string>
 
 bool PersonList::isEmpty() const {
 	return list.empty();
@@ -61,4 +62,31 @@ tuple<Person, time_t, int> PersonList::nextCelebrant(tm& timestamp) const
 void PersonList::clear()
 {
 	list.clear();
+}
+
+ostream& operator<<(ostream& out, PersonList& persons)
+{
+	for (list<Person>::iterator i = persons.begin(); i != persons.end(); i++) 
+	{
+		out << (*i) << endl;
+	}
+
+	return out;
+}
+
+
+istream& operator>>(istream& in, PersonList& persons)
+{
+	Person person;
+	while (!in.eof()) 
+	{
+		in >> person;
+		if (in.fail()) 
+		{
+			break;
+		}
+		persons.add(person);
+	}
+
+	return in;
 }

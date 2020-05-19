@@ -105,18 +105,80 @@ namespace PersonListTesting {
 	}
 
 
+	TEST_F(PersonListTests, Assigning) {
+		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("777", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
+
+		PersonList p;
+		p = persons;
+
+		EXPECT_EQ(p.size(), persons.size());
+
+		for (
+			std::list<Person>::const_iterator i = persons.begin(), j = p.begin();
+			i != persons.end() && j != p.end();
+			i++, j++) {
+			EXPECT_EQ(*j, *i);
+		}
+	}
+
+	TEST_F(PersonListTests, Writing) {
+		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
+
+		std::stringstream ss;
+
+		ss << persons;
+
+		EXPECT_EQ(
+			"111 Mary Smith 978296400 +98765432100\n"
+			"222 Mary Smith 978296400 +98765432100\n"
+			"333 Mary Smith 978296400 +98765432100\n",
+			ss.str());
+
+	}
+
+	TEST_F(PersonListTests, Reading) {
+		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
+
+		std::stringstream ss;
+
+		ss << persons;
+
+		PersonList p;
+		ss >> p;
+
+		EXPECT_EQ(p.size(), persons.size());
+
+		for (
+			std::list<Person>::const_iterator i = persons.begin(), j = p.begin();
+			i != persons.end() && j != p.end();
+			i++, j++) {
+			EXPECT_EQ(*j, *i);
+		}
+
+	}
+
 	/*
 
 		Класс L - это связный список объектов класса S.
 
 		Он должен поддерживать :
-		- конструктор
-		- деструктор
+		? конструктор
+		? деструктор
 
-		- operator=
+		? operator=
 
-		- operator>> - прочитать список из потока ввода
-		- operator<< - вывести список в поток вывода
+		+ operator>> - прочитать список из потока ввода
+		+ operator<< - вывести список в поток вывода
 
 		+ add - добавить элемент в конец списка
 		+ sort - отсортировать

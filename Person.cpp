@@ -111,10 +111,6 @@ ostream& operator<<(ostream& out, const Person& person)
 
 istream& operator>>(istream& in, Person& person)
 {
-	//string buffer; 
-	//in >> buffer;
-
-	//istringstream iss(buffer);
 	string fn;
 	string mn;
 	string ln;

@@ -4,6 +4,7 @@
 #include <compare>
 #include <ctime>
 #include <optional>
+#include <iostream>
 
 using namespace std;
 
@@ -48,6 +49,10 @@ public:
 	//};
 
 	bool check(const Person&) const;
+
+	void setFirstPerson(const string& aString) {
+		firstName = aString;
+	}
 
 private:
 	optional<string> lastName;

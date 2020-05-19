@@ -1,6 +1,8 @@
 #pragma once
 #include <list>
 #include "Person.h"
+#include <string>
+#include <iostream>
 
 class PersonList
 {
@@ -31,6 +33,12 @@ public:
 	//typedef tuple<Person, time_t, int> NextCelebrant;
 	//NextCelebrant nextCelebrant(tm&) const;
 	tuple<Person, time_t, int> nextCelebrant(tm&) const;
+
+	//PersonList& operator=(const PersonList& another);
+
+	friend ostream& operator<<(ostream& out, PersonList& person);
+	friend istream& operator>>(istream& out, PersonList& person);
+
 
 protected:
 	list<Person> list;
