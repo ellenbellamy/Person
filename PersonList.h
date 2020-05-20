@@ -30,14 +30,20 @@ public:
 	void addAll(PersonList&);
 	void merge(PersonList&);
 
-	//typedef tuple<Person, time_t, int> NextCelebrant;
-	//NextCelebrant nextCelebrant(tm&) const;
 	tuple<Person, time_t, int> nextCelebrant(tm&) const;
 
 	//PersonList& operator=(const PersonList& another);
 
-	friend ostream& operator<<(ostream& out, PersonList& person);
-	friend istream& operator>>(istream& out, PersonList& person);
+	friend ostream& operator<<(ostream&, PersonList&);
+	friend istream& operator>>(istream&, PersonList&);
+
+	bool operator==(const PersonList& persons) const {
+		return list == persons.list;
+	}
+
+	list<Person> filter(const Person&) const;
+
+	ostream& printFiltered(ostream&, Person& filter);
 
 
 protected:

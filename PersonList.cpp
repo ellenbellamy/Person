@@ -59,9 +59,27 @@ tuple<Person, time_t, int> PersonList::nextCelebrant(tm& timestamp) const
 	return tuple<Person, time_t, int>(*nextCelebrant.first, nextCelebrant.second, nextCelebrant.first->getBirthday());
 }
 
+list<Person> PersonList::filter(const Person& filter) const
+{
+	 std::list<Person> filtered;
+	 copy_if(list.begin(), list.end(), back_inserter(filtered), [filter](Person p) {
+		 return p.check(filter); 
+	 });
+	 return filtered;
+}
 void PersonList::clear()
 {
 	list.clear();
+}
+
+ostream& operator<<(ostream& out, list<Person> persons)
+{
+	for (list<Person>::iterator i = persons.begin(); i != persons.end(); i++)
+	{
+		out << (*i) << endl;
+	}
+
+	return out;
 }
 
 ostream& operator<<(ostream& out, PersonList& persons)
@@ -90,3 +108,9 @@ istream& operator>>(istream& in, PersonList& persons)
 
 	return in;
 }
+
+ostream& PersonList::printFiltered(ostream& out, Person& filterPerson)
+{
+	return out << filter(filterPerson);
+}
+

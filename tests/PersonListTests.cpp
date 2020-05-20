@@ -117,14 +117,7 @@ namespace PersonListTesting {
 		PersonList p;
 		p = persons;
 
-		EXPECT_EQ(p.size(), persons.size());
-
-		for (
-			std::list<Person>::const_iterator i = persons.begin(), j = p.begin();
-			i != persons.end() && j != p.end();
-			i++, j++) {
-			EXPECT_EQ(*j, *i);
-		}
+		EXPECT_EQ(p, persons);
 	}
 
 	TEST_F(PersonListTests, Writing) {
@@ -132,7 +125,7 @@ namespace PersonListTesting {
 		persons.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
 		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
 
-		std::stringstream ss;
+		stringstream ss;
 
 		ss << persons;
 
@@ -141,7 +134,6 @@ namespace PersonListTesting {
 			"222 Mary Smith 978296400 +98765432100\n"
 			"333 Mary Smith 978296400 +98765432100\n",
 			ss.str());
-
 	}
 
 	TEST_F(PersonListTests, Reading) {
@@ -149,23 +141,66 @@ namespace PersonListTesting {
 		persons.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
 		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
 
-		std::stringstream ss;
+		stringstream ss;
 
 		ss << persons;
 
 		PersonList p;
 		ss >> p;
 
-		EXPECT_EQ(p.size(), persons.size());
-
-		for (
-			std::list<Person>::const_iterator i = persons.begin(), j = p.begin();
-			i != persons.end() && j != p.end();
-			i++, j++) {
-			EXPECT_EQ(*j, *i);
-		}
+		EXPECT_EQ(persons, p);
 
 	}
+
+	TEST_F(PersonListTests, Filtering) {
+		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("222", "John", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("444", "John", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"));
+
+		EXPECT_EQ(
+			persons.filter(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100")),
+			list<Person>({
+				Person("111", "Mary", "Smith", "2001-01-01", "+98765432100")
+				}));
+
+		EXPECT_EQ(
+			persons.filter(Person({}, "Mary", {}, {}, {})),
+			list<Person>({
+				Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("555", "Mary", "Smith", "2001-01-01", "+98765432100")
+				}));
+	}
+
+	TEST_F(PersonListTests, PrintingFiltered) {
+		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("222", "John", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("444", "John", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"));
+
+		stringstream ss;
+
+		persons.printFiltered(ss, Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		EXPECT_EQ(
+			ss.str(),
+			"111 Mary Smith 978296400 +98765432100\n");
+
+		persons.printFiltered(ss, Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+
+
+		ss.str(string());
+		persons.printFiltered(ss, Person({}, "Mary", {}, {}, {}));
+		EXPECT_EQ(
+			ss.str(),
+			"111 Mary Smith 978296400 +98765432100\n"
+			"333 Mary Smith 978296400 +98765432100\n"
+			"555 Mary Smith 978296400 +98765432100\n"
+		);
+	}
+
 
 	/*
 
@@ -186,7 +221,7 @@ namespace PersonListTesting {
 		+ addSort - добавить в отсортированный список с сохранением пор€дка сортировки
 		+ addList - слить вместе 2 списка.
 
-		- write - вывести на экран элементы, удовлетвор€ющие услови€м
+		+ write - вывести на экран элементы, удовлетвор€ющие услови€м
 
 		- remove - удалить элементы, удовлетвор€ющие услови€м
 
