@@ -152,7 +152,7 @@ namespace PersonListTesting {
 
 	}
 
-	TEST_F(PersonListTests, Filtering) {
+	TEST_F(PersonListTests, Selecting) {
 		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
 		persons.add(Person("222", "John", "Smith", "2001-01-01", "+98765432100"));
 		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
@@ -160,13 +160,13 @@ namespace PersonListTesting {
 		persons.add(Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"));
 
 		EXPECT_EQ(
-			persons.filter(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100")),
+			persons.select(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100")),
 			list<Person>({
 				Person("111", "Mary", "Smith", "2001-01-01", "+98765432100")
 				}));
 
 		EXPECT_EQ(
-			persons.filter(Person({}, "Mary", {}, {}, {})),
+			persons.select(Person({}, "Mary", {}, {}, {})),
 			list<Person>({
 				Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
 				Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"),
@@ -174,7 +174,7 @@ namespace PersonListTesting {
 				}));
 	}
 
-	TEST_F(PersonListTests, PrintingFiltered) {
+	TEST_F(PersonListTests, PrintingSelected) {
 		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
 		persons.add(Person("222", "John", "Smith", "2001-01-01", "+98765432100"));
 		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
@@ -183,16 +183,16 @@ namespace PersonListTesting {
 
 		stringstream ss;
 
-		persons.printFiltered(ss, Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.printSelected(ss, Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
 		EXPECT_EQ(
 			ss.str(),
 			"111 Mary Smith 978296400 +98765432100\n");
 
-		persons.printFiltered(ss, Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.printSelected(ss, Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
 
 
 		ss.str(string());
-		persons.printFiltered(ss, Person({}, "Mary", {}, {}, {}));
+		persons.printSelected(ss, Person({}, "Mary", {}, {}, {}));
 		EXPECT_EQ(
 			ss.str(),
 			"111 Mary Smith 978296400 +98765432100\n"
@@ -201,6 +201,61 @@ namespace PersonListTesting {
 		);
 	}
 
+	TEST_F(PersonListTests, Removing) {
+		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("222", "John", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("444", "Phil", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("555", "John", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("777", "Jack", "Smith", "2001-01-01", "+98765432100"));
+		persons.add(Person("888", "Mary", "Smith", "2001-01-01", "+98765432100"));
+
+		persons.remove(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		EXPECT_EQ(
+			persons,
+			list<Person>({
+		            Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
+					Person("222", "John", "Smith", "2001-01-01", "+98765432100"),
+					Person("444", "Phil", "Smith", "2001-01-01", "+98765432100"),
+					Person("555", "John", "Smith", "2001-01-01", "+98765432100"),
+					Person("777", "Jack", "Smith", "2001-01-01", "+98765432100"),
+					Person("888", "Mary", "Smith", "2001-01-01", "+98765432100")
+				}));
+
+		persons.remove(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
+		EXPECT_EQ(
+			persons,
+			list<Person>({
+					Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
+					Person("222", "John", "Smith", "2001-01-01", "+98765432100"),
+					Person("444", "Phil", "Smith", "2001-01-01", "+98765432100"),
+					Person("555", "John", "Smith", "2001-01-01", "+98765432100"),
+					Person("777", "Jack", "Smith", "2001-01-01", "+98765432100"),
+					Person("888", "Mary", "Smith", "2001-01-01", "+98765432100")
+				}));
+
+		persons.remove(Person({}, "John", "Smith", {}, {}));
+		EXPECT_EQ(
+			persons,
+			list<Person>({
+					Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
+					Person("444", "Phil", "Smith", "2001-01-01", "+98765432100"),
+					Person("777", "Jack", "Smith", "2001-01-01", "+98765432100"),
+					Person("888", "Mary", "Smith", "2001-01-01", "+98765432100")
+				}));
+
+		persons.remove(Person({}, "Phil", "Smith", {}, {}));
+		EXPECT_EQ(
+			persons,
+			list<Person>({
+					Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
+					Person("777", "Jack", "Smith", "2001-01-01", "+98765432100"),
+					Person("888", "Mary", "Smith", "2001-01-01", "+98765432100")
+				}));
+
+		persons.remove(Person({}, {}, {}, {}, {}));
+		EXPECT_TRUE(persons.isEmpty());
+	}
 
 	/*
 
@@ -223,7 +278,7 @@ namespace PersonListTesting {
 
 		+ write - вывести на экран элементы, удовлетвор€ющие услови€м
 
-		- remove - удалить элементы, удовлетвор€ющие услови€м
+		+ remove - удалить элементы, удовлетвор€ющие услови€м
 
 		+ getBirthday - определ€ет ближайший день рождени€ и сколько до него осталось дней
 

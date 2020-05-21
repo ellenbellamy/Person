@@ -38,15 +38,22 @@ public:
 	friend istream& operator>>(istream&, PersonList&);
 
 	bool operator==(const PersonList& persons) const {
-		return list == persons.list;
+		return persons == persons.persons;
 	}
 
-	list<Person> filter(const Person&) const;
+	bool operator==(const list<Person>& personList) const {
+		return persons == personList;
+	}
 
-	ostream& printFiltered(ostream&, Person& filter);
 
+
+	list<Person> select(const Person& condition) const;
+
+	ostream& printSelected(ostream&, Person& condition);
+
+	void remove(Person& condition);
 
 protected:
-	list<Person> list;
+	list<Person> persons;
 };
 

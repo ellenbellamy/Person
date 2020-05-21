@@ -3,53 +3,53 @@
 #include <string>
 
 bool PersonList::isEmpty() const {
-	return list.empty();
+	return persons.empty();
 }
 
 void PersonList::add(const Person& aPerson) {
-	list.push_back(aPerson);
+	persons.push_back(aPerson);
 }
 
 Person PersonList::front() const {
-	return list.front();
+	return persons.front();
 }
 
 
 list<Person>::iterator PersonList::begin() {
-	return list.begin();
+	return persons.begin();
 }
 
 list<Person>::iterator PersonList::end() {
-	return list.end();
+	return persons.end();
 }
 
 void PersonList::sort() {
-	list.sort();
+	persons.sort();
 }
 
 size_t PersonList::size() const
 {
-	return list.size();
+	return persons.size();
 }
 
 bool PersonList::isSorted() const {
-	return is_sorted(list.begin(), list.end());
+	return is_sorted(persons.begin(), persons.end());
 }
 
 void PersonList::addAll(PersonList& anotherList)
 {
-	list.insert(list.end(), anotherList.begin(), anotherList.end());
+	persons.insert(persons.end(), anotherList.begin(), anotherList.end());
 }
 
 void PersonList::merge(PersonList& anotherList)
 {
-	list.merge(anotherList.list);
+	persons.merge(anotherList.persons);
 }
 
 tuple<Person, time_t, int> PersonList::nextCelebrant(tm& timestamp) const
 {
-	pair<std::list<Person>::const_iterator, int> nextCelebrant(list.begin(), list.begin()->daysUntilBirthday(timestamp));
-	for (std::list<Person>::const_iterator i = list.begin(); i != list.end(); i++) {
+	pair<list<Person>::const_iterator, int> nextCelebrant(persons.begin(), persons.begin()->daysUntilBirthday(timestamp));
+	for (list<Person>::const_iterator i = persons.begin(); i != persons.end(); i++) {
 		int d = i->daysUntilBirthday(timestamp);
 		if (d < nextCelebrant.second) {
 			nextCelebrant = make_pair(i, d);
@@ -59,17 +59,17 @@ tuple<Person, time_t, int> PersonList::nextCelebrant(tm& timestamp) const
 	return tuple<Person, time_t, int>(*nextCelebrant.first, nextCelebrant.second, nextCelebrant.first->getBirthday());
 }
 
-list<Person> PersonList::filter(const Person& filter) const
+list<Person> PersonList::select(const Person& condition) const
 {
-	 std::list<Person> filtered;
-	 copy_if(list.begin(), list.end(), back_inserter(filtered), [filter](Person p) {
-		 return p.check(filter); 
-	 });
-	 return filtered;
+	list<Person> filtered;
+	copy_if(persons.begin(), persons.end(), back_inserter(filtered), [condition](Person p) {
+		return p.check(condition);
+	});
+	return filtered;
 }
 void PersonList::clear()
 {
-	list.clear();
+	persons.clear();
 }
 
 ostream& operator<<(ostream& out, list<Person> persons)
@@ -84,7 +84,7 @@ ostream& operator<<(ostream& out, list<Person> persons)
 
 ostream& operator<<(ostream& out, PersonList& persons)
 {
-	for (list<Person>::iterator i = persons.begin(); i != persons.end(); i++) 
+	for (list<Person>::iterator i = persons.begin(); i != persons.end(); i++)
 	{
 		out << (*i) << endl;
 	}
@@ -96,10 +96,10 @@ ostream& operator<<(ostream& out, PersonList& persons)
 istream& operator>>(istream& in, PersonList& persons)
 {
 	Person person;
-	while (!in.eof()) 
+	while (!in.eof())
 	{
 		in >> person;
-		if (in.fail()) 
+		if (in.fail())
 		{
 			break;
 		}
@@ -109,8 +109,15 @@ istream& operator>>(istream& in, PersonList& persons)
 	return in;
 }
 
-ostream& PersonList::printFiltered(ostream& out, Person& filterPerson)
+ostream& PersonList::printSelected(ostream& out, Person& condition)
 {
-	return out << filter(filterPerson);
+	return out << select(condition);
+}
+
+void PersonList::remove(Person& condition)
+{
+	persons.remove_if([condition](Person p) {
+		return p.check(condition);
+	});
 }
 
