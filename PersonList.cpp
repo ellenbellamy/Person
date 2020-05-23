@@ -2,6 +2,15 @@
 #include <algorithm>
 #include <string>
 
+PersonList::PersonList() {
+}
+
+
+PersonList::PersonList(const list<Person>& personList) {
+	persons= personList;
+}
+
+
 bool PersonList::isEmpty() const {
 	return persons.empty();
 }
@@ -36,10 +45,19 @@ bool PersonList::isSorted() const {
 	return is_sorted(persons.begin(), persons.end());
 }
 
+
+
 void PersonList::addAll(PersonList& anotherList)
 {
 	persons.insert(persons.end(), anotherList.begin(), anotherList.end());
 }
+
+void PersonList::addAll(const list<Person>& anotherList)
+{
+	persons.insert(persons.end(), anotherList.begin(), anotherList.end());
+}
+
+
 
 void PersonList::merge(PersonList& anotherList)
 {

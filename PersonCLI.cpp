@@ -9,6 +9,10 @@ void PersonCLI::start(istream& input, ostream& output) {
 	}
 }
 
+PersonList PersonCLI::getPersons() {
+	return persons;
+}
+
 
 string PersonCLI::process(const string& commandString) {
 	if (commandString == "help") {

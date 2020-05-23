@@ -7,6 +7,9 @@
 class PersonList
 {
 public:
+	PersonList();
+	PersonList(const list<Person>&);
+
 	bool isEmpty() const;
 
 	void add(const Person&);
@@ -28,14 +31,22 @@ public:
 
 
 	void addAll(PersonList&);
+	void addAll(const list<Person>&);
+
 	void merge(PersonList&);
 
 	tuple<Person, time_t, int> nextCelebrant(tm&) const;
 
+
+
 	//PersonList& operator=(const PersonList& another);
+
+
 
 	friend ostream& operator<<(ostream&, PersonList&);
 	friend istream& operator>>(istream&, PersonList&);
+
+
 
 	bool operator==(const PersonList& persons) const {
 		return persons == persons.persons;

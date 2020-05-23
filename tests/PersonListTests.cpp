@@ -26,14 +26,15 @@ namespace PersonListTesting {
 	}
 
 	TEST_F(PersonListTests, Sorting) {
-		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
-		persons.add(Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"));
-		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
-		persons.add(Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"));
-		persons.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
-		persons.add(Person("777", "Mary", "Smith", "2001-01-01", "+98765432100"));
-		persons.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
-
+		persons.addAll({
+				Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("777", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("222", "Mary", "Smith", "2001-01-01", "+98765432100")
+			});
 
 		persons.sort();
 
@@ -125,6 +126,7 @@ namespace PersonListTesting {
 		persons.add(Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"));
 		persons.add(Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"));
 
+
 		stringstream ss;
 
 		ss << persons;
@@ -215,7 +217,7 @@ namespace PersonListTesting {
 		EXPECT_EQ(
 			persons,
 			list<Person>({
-		            Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
+					Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
 					Person("222", "John", "Smith", "2001-01-01", "+98765432100"),
 					Person("444", "Phil", "Smith", "2001-01-01", "+98765432100"),
 					Person("555", "John", "Smith", "2001-01-01", "+98765432100"),

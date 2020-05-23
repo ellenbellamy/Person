@@ -3,16 +3,34 @@
 #include "../PersonCLI.h"
 
 #include <fstream>
-
+#include <stdio.h>
 
 class PersonCLITests : public ::testing::Test
 {
 protected:
 	PersonCLI cli;
 
-	//void TearDown() {
-	//	persons.clear();
-	//}
+	const char* const personsFileName = "persons.list";
+
+	void SetUp() {
+		std::ofstream o(personsFileName);
+
+		PersonList personList({
+				Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("777", "Mary", "Smith", "2001-01-01", "+98765432100"),
+				Person("222", "Mary", "Smith", "2001-01-01", "+98765432100")
+			});
+
+		o << personList << std::endl;
+	}
+
+	void TearDown() {
+		//remove(personsFileName);
+	}
 };
 
 
@@ -107,33 +125,25 @@ TEST_F(PersonCLITests, CommandSquence) {
 }
 
 
+TEST_F(PersonCLITests, Load) {
 
+	stringstream
+		input,
+		output;
 
-/*
-string readUserInput(std::istream& input)
-{
-	string command;
-	cout << ":";
-	input >> command;
-	return command;
+	input << "abracadabra\n";
+
+	cli.start(input, output);
+
+	EXPECT_EQ(
+		output.str(),
+		"ERROR: Unknown command: abracadabra\n"
+	);
 }
 
-TEST(Some, Test) {
-	//// in production code pass std::cin
-	//std::cout << "readUserInput from std::cin: " << readUserInput(std::cin) << std::endl;
-
-	//// in testing pass some mock data from the file (or whatever)
-	//std::cout << "readUserInput from ifs: " << readUserInput(ifs) << std::endl;
-
-	cout << "Processed command: " << readUserInput(ss) << std::endl;
+TEST_F(PersonCLITests, PersonsIsEmptyByDefault) {
+	ASSERT_TRUE(cli.getPersons().isEmpty());
 }
-*/
-
-//TEST_F(PersonCLITests, AddingElement) {
-//	persons.add(Person());
-//
-//	EXPECT_FALSE(persons.isEmpty());
-//}
 
 /*
 
