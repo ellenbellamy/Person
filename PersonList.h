@@ -1,14 +1,18 @@
 #pragma once
-#include <list>
 #include "Person.h"
+
+#include <list>
 #include <string>
 #include <iostream>
+#include <vector>
+
 
 class PersonList
 {
 public:
 	PersonList();
 	PersonList(const list<Person>&);
+	PersonList(const initializer_list<Person>&);
 
 	bool isEmpty() const;
 

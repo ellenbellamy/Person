@@ -12,20 +12,21 @@ protected:
 
 	const char* const personsFileName = "persons.list";
 
+	PersonList storedPersons{
+		Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
+		Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"),
+		Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"),
+		Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"),
+		Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"),
+		Person("777", "Mary", "Smith", "2001-01-01", "+98765432100"),
+		Person("222", "Mary", "Smith", "2001-01-01", "+98765432100")
+	};
+
+
 	void SetUp() {
 		std::ofstream o(personsFileName);
 
-		PersonList personList({
-				Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
-				Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"),
-				Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"),
-				Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"),
-				Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"),
-				Person("777", "Mary", "Smith", "2001-01-01", "+98765432100"),
-				Person("222", "Mary", "Smith", "2001-01-01", "+98765432100")
-			});
-
-		o << personList << std::endl;
+		o << storedPersons << std::endl;
 	}
 
 	void TearDown() {
@@ -38,14 +39,19 @@ protected:
 		cli.start(input, output);
 		return output;
 	}
-
+	ostringstream executeCommandsFrom(string inputString) {
+		return executeCommandsFrom(istringstream(inputString));
+	}
+	ostringstream executeCommandsFrom(const char* inputString) {
+		return executeCommandsFrom(istringstream(inputString));
+	}
 };
 
 
 
 TEST_F(PersonCLITests, Help) {
 	EXPECT_EQ(
-		executeCommandsFrom(istringstream("help\n")).str(),
+		executeCommandsFrom("help\n").str(),
 		"    help				--- вывести на экран список команд\n"
 		"    clear				--- очистить список\n"
 		"    load <filename>	--- добавить список из файла\n"
@@ -61,25 +67,25 @@ TEST_F(PersonCLITests, Help) {
 
 TEST_F(PersonCLITests, UnknownCommand) {
 	EXPECT_EQ(
-		executeCommandsFrom(istringstream("abracadabra\n")).str(),
+		executeCommandsFrom("abracadabra\n").str(),
 		"ERROR: Unknown command: abracadabra\n"
 	);
 }
 
 TEST_F(PersonCLITests, Exit) {
 	EXPECT_EQ(
-		executeCommandsFrom(istringstream("exit\n")).str(),
+		executeCommandsFrom("exit\n").str(),
 		"Finished\n"
 	);
 }
 
 TEST_F(PersonCLITests, CommandSquence) {
 	EXPECT_EQ(
-		executeCommandsFrom(istringstream(
+		executeCommandsFrom(
 			"help\n"
 			"abracadabra\n"
 			"exit\n"
-		)).str(),
+		).str(),
 		"    help				--- вывести на экран список команд\n"
 		"    clear				--- очистить список\n"
 		"    load <filename>	--- добавить список из файла\n"
@@ -97,18 +103,9 @@ TEST_F(PersonCLITests, CommandSquence) {
 	);
 }
 
-
-TEST_F(PersonCLITests, Load) {
-	EXPECT_EQ(
-		executeCommandsFrom(istringstream("abracadabra\n")).str(),
-		"ERROR: Unknown command: abracadabra\n"
-	);
-}
-
 TEST_F(PersonCLITests, PersonsIsEmptyByDefault) {
 	ASSERT_TRUE(cli.getPersons().isEmpty());
 }
-
 
 TEST_F(PersonCLITests, Clear) {
 	cli.getPersons().add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
@@ -119,20 +116,25 @@ TEST_F(PersonCLITests, Clear) {
 }
 
 
+TEST_F(PersonCLITests, Load) {
+	executeCommandsFrom(string("load ") + personsFileName + "\n").str();
+	EXPECT_EQ(cli.getPersons(), storedPersons);
+}
+
 
 
 /*
 
 		ќпределить в функции main интерпретатор командной строки, реализующий команды :
-		- help --- вывести на экран список команд
-		- clear --- очистить список
+		+ help --- вывести на экран список команд
+		+ clear --- очистить список
 		- load <filename> --- добавить список из файла
 		- save <filename> --- сохранить список в файле
 		- add(переходит в режим ввода, начинающийс€ с ">") --- добавить элемент
 		- sort --- отсортировать
 		- find <услови€> --- вывести на экран элементы, удовлетвор€ющие услови€м
 		- delete <услови€> --- удалить элементы, удовлетвор€ющие услови€м
-		- exit --- завершить работу и выйти.
+		+ exit --- завершить работу и выйти.
 		- birthday --- вывести на экран людей, у которых ближайший ƒ–
 
 */

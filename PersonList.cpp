@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <string>
 
+
 PersonList::PersonList() {
 }
 
@@ -10,6 +11,9 @@ PersonList::PersonList(const list<Person>& personList) {
 	persons= personList;
 }
 
+PersonList::PersonList(const initializer_list<Person>& initPersons) {
+	persons = initPersons;
+}
 
 bool PersonList::isEmpty() const {
 	return persons.empty();
