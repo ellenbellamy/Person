@@ -11,7 +11,7 @@ public:
 
 	void start(istream&, ostream&);
 
-	PersonList getPersons(); 
+	PersonList& getPersons(); 
 
 private:
 	PersonList persons;

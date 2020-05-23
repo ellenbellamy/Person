@@ -9,7 +9,7 @@ void PersonCLI::start(istream& input, ostream& output) {
 	}
 }
 
-PersonList PersonCLI::getPersons() {
+PersonList& PersonCLI::getPersons() {
 	return persons;
 }
 

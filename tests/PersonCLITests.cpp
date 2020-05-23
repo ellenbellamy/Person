@@ -29,23 +29,23 @@ protected:
 	}
 
 	void TearDown() {
-		//remove(personsFileName);
+		remove(personsFileName);
 	}
+
+
+	ostringstream executeCommandsFrom(istream& input) {
+		ostringstream output;
+		cli.start(input, output);
+		return output;
+	}
+
 };
 
 
+
 TEST_F(PersonCLITests, Help) {
-
-	stringstream
-		input,
-		output;
-
-	input << "help\n";
-
-	cli.start(input, output);
-
 	EXPECT_EQ(
-		output.str(),
+		executeCommandsFrom(istringstream("help\n")).str(),
 		"    help				--- вывести на экран список команд\n"
 		"    clear				--- очистить список\n"
 		"    load <filename>	--- добавить список из файла\n"
@@ -60,53 +60,26 @@ TEST_F(PersonCLITests, Help) {
 }
 
 TEST_F(PersonCLITests, UnknownCommand) {
-
-	stringstream
-		input,
-		output;
-
-	input << "abracadabra\n";
-
-	cli.start(input, output);
-
 	EXPECT_EQ(
-		output.str(),
+		executeCommandsFrom(istringstream("abracadabra\n")).str(),
 		"ERROR: Unknown command: abracadabra\n"
 	);
 }
 
 TEST_F(PersonCLITests, Exit) {
-
-	stringstream
-		input,
-		output;
-
-	input << "exit\n";
-
-	cli.start(input, output);
-
 	EXPECT_EQ(
-		output.str(),
+		executeCommandsFrom(istringstream("exit\n")).str(),
 		"Finished\n"
 	);
 }
 
-
 TEST_F(PersonCLITests, CommandSquence) {
-
-	stringstream
-		input,
-		output;
-
-	input
-		<< "help\n"
-		<< "abracadabra\n"
-		<< "exit\n";
-
-	cli.start(input, output);
-
 	EXPECT_EQ(
-		output.str(),
+		executeCommandsFrom(istringstream(
+			"help\n"
+			"abracadabra\n"
+			"exit\n"
+		)).str(),
 		"    help				--- вывести на экран список команд\n"
 		"    clear				--- очистить список\n"
 		"    load <filename>	--- добавить список из файла\n"
@@ -126,17 +99,8 @@ TEST_F(PersonCLITests, CommandSquence) {
 
 
 TEST_F(PersonCLITests, Load) {
-
-	stringstream
-		input,
-		output;
-
-	input << "abracadabra\n";
-
-	cli.start(input, output);
-
 	EXPECT_EQ(
-		output.str(),
+		executeCommandsFrom(istringstream("abracadabra\n")).str(),
 		"ERROR: Unknown command: abracadabra\n"
 	);
 }
@@ -144,6 +108,18 @@ TEST_F(PersonCLITests, Load) {
 TEST_F(PersonCLITests, PersonsIsEmptyByDefault) {
 	ASSERT_TRUE(cli.getPersons().isEmpty());
 }
+
+
+TEST_F(PersonCLITests, Clear) {
+	cli.getPersons().add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
+	ASSERT_FALSE(cli.getPersons().isEmpty());
+
+	executeCommandsFrom(istringstream("clear\n"));
+	ASSERT_FALSE(cli.getPersons().isEmpty());
+}
+
+
+
 
 /*
 
