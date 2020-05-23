@@ -149,11 +149,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Person.cpp" />
+    <ClCompile Include="PersonCLI.cpp" />
     <ClCompile Include="PersonList.cpp" />
     <ClCompile Include="PersonProject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Person.h" />
+    <ClInclude Include="PersonCLI.h" />
     <ClInclude Include="PersonList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
