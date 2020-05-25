@@ -57,5 +57,10 @@ string PersonCLI::process(const string& commandString) {
 		return "Write to: " + fileName;
 	}
 
+	if (command == "sort") {
+		persons.sort();
+		return "Sorted";
+	}
+
 	return "ERROR: Unknown command: " + commandString + "\n";
 }

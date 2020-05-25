@@ -122,11 +122,10 @@ TEST_F(PersonCLITests, Load) {
 }
 
 TEST_F(PersonCLITests, Save) {
-	string newFileName( "saving_persons.test");
-
 	cli.setPersons(storedPersons);
 
-	executeCommandsFrom(string("save ") + newFileName + "\n").str();
+	string newFileName("saving_persons.test");
+	executeCommandsFrom(string("save ") + newFileName + "\n");
 
 	PersonList p;
 	ifstream(newFileName) >> p;
@@ -134,6 +133,14 @@ TEST_F(PersonCLITests, Save) {
 	EXPECT_EQ(p, storedPersons);
 }
 
+TEST_F(PersonCLITests, Sort) {
+	cli.setPersons(storedPersons);
+
+	executeCommandsFrom(string("sort\n"));
+	
+	storedPersons.sort();
+	EXPECT_EQ(cli.getPersons(), storedPersons);
+}
 
 
 /*
@@ -142,7 +149,7 @@ TEST_F(PersonCLITests, Save) {
 		+ help --- вывести на экран список команд
 		+ clear --- очистить список
 		+ load <filename> --- добавить список из файла
-		- save <filename> --- сохранить список в файле
+		+ save <filename> --- сохранить список в файле
 		- add(переходит в режим ввода, начинающийс€ с ">") --- добавить элемент
 		- sort --- отсортировать
 		- find <услови€> --- вывести на экран элементы, удовлетвор€ющие услови€м
