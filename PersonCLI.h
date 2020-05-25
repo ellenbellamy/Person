@@ -11,7 +11,9 @@ public:
 
 	void start(istream&, ostream&);
 
-	PersonList& getPersons(); 
+	PersonList& getPersons();
+	void setPersons(const PersonList& p);
+
 
 private:
 	PersonList persons;

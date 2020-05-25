@@ -52,8 +52,8 @@ public:
 
 
 
-	bool operator==(const PersonList& persons) const {
-		return persons == persons.persons;
+	bool operator==(const PersonList& another) const {
+		return persons == another.persons;
 	}
 
 	bool operator==(const list<Person>& personList) const {

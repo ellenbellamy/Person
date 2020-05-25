@@ -1,5 +1,5 @@
 #include "PersonCLI.h"
-
+#include <fstream>
 #include <sstream>
 
 void PersonCLI::start(istream& input, ostream& output) {
@@ -13,9 +13,17 @@ PersonList& PersonCLI::getPersons() {
 	return persons;
 }
 
+void PersonCLI::setPersons(const PersonList& p) {
+	persons = p;
+}
 
 string PersonCLI::process(const string& commandString) {
-	if (commandString == "help") {
+
+	string command;
+	istringstream commandStream = istringstream(commandString);
+	commandStream >> command;
+
+	if (command == "help") {
 		return
 			"    help				--- вывести на экран список команд\n"
 			"    clear				--- очистить список\n"
@@ -28,8 +36,25 @@ string PersonCLI::process(const string& commandString) {
 			"    exit				--- завершить работу и выйти\n"
 			"    birthday			--- вывести на экран людей, у которых ближайший ДР\n";
 	}
-	if (commandString == "exit") {
+	
+	if (command == "exit") {
 		return "Finished\n";
+	}
+
+	if (command == "load") {
+		string fileName;
+		commandStream >> fileName;
+		ifstream f(fileName);
+		f >> persons;
+		return "Read from: " + fileName;
+	}
+
+	if (command == "save") {
+		string fileName;
+		commandStream >> fileName;
+		ofstream f(fileName);
+		f << persons;
+		return "Write to: " + fileName;
 	}
 
 	return "ERROR: Unknown command: " + commandString + "\n";

@@ -30,7 +30,7 @@ protected:
 	}
 
 	void TearDown() {
-		remove(personsFileName);
+		//remove(personsFileName);
 	}
 
 
@@ -121,6 +121,19 @@ TEST_F(PersonCLITests, Load) {
 	EXPECT_EQ(cli.getPersons(), storedPersons);
 }
 
+TEST_F(PersonCLITests, Save) {
+	string newFileName( "saving_persons.test");
+
+	cli.setPersons(storedPersons);
+
+	executeCommandsFrom(string("save ") + newFileName + "\n").str();
+
+	PersonList p;
+	ifstream(newFileName) >> p;
+
+	EXPECT_EQ(p, storedPersons);
+}
+
 
 
 /*
@@ -128,7 +141,7 @@ TEST_F(PersonCLITests, Load) {
 		Определить в функции main интерпретатор командной строки, реализующий команды :
 		+ help --- вывести на экран список команд
 		+ clear --- очистить список
-		- load <filename> --- добавить список из файла
+		+ load <filename> --- добавить список из файла
 		- save <filename> --- сохранить список в файле
 		- add(переходит в режим ввода, начинающийся с ">") --- добавить элемент
 		- sort --- отсортировать
