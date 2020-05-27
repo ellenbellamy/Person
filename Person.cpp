@@ -52,6 +52,8 @@ Person::Person(const Person& aPerson) {
 	phone = aPerson.phone;
 }
 
+
+
 string Person::getFirstName() const {
 	return firstName.has_value() ? firstName.value() : "";
 }
@@ -101,7 +103,8 @@ const unsigned char delimiter = ' ';
 
 ostream& operator<<(ostream& out, const Person& person)
 {
-	return out
+	return
+		out
 		<< person.getFirstName() << delimiter
 		<< person.getMiddleName() << delimiter
 		<< person.getLastName() << delimiter
@@ -114,7 +117,7 @@ istream& operator>>(istream& in, Person& person)
 	string fn;
 	string mn;
 	string ln;
-	time_t b;
+	string b;
 	string p;
 
 	in >> fn
@@ -123,13 +126,14 @@ istream& operator>>(istream& in, Person& person)
 		>> b
 		>> p;
 
-	person.firstName = fn;
-	person.middleName = mn;
-	person.lastName = ln;
-	person.birthday = b;
-	person.phone = p;
+	person.firstName = ((fn == "*") ? nullopt : optional<string>(fn));
+	person.middleName = ((mn == "*") ? nullopt : optional<string>(mn));
+	person.lastName = ((ln == "*") ? nullopt : optional<string>(ln));
+	person.birthday = ((b == "*") ? nullopt : optional<time_t>(_atoi64(b.c_str())));
 
-	person.birthdayTm = convertTime(person.birthday.value());
+	person.phone = ((p == "*") ? nullopt : optional<string>(p));
+
+	person.birthdayTm = person.birthday.has_value() ? optional<tm>(convertTime(person.birthday.value())) : nullopt;
 
 	return in;
 }

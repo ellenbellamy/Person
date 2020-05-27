@@ -17,11 +17,7 @@ namespace PersonTesting {
 	}
 
 	TEST(Person, WritesItself) {
-		std::stringstream ss;
-
-		ss << person;
-
-		EXPECT_EQ("Anna Mary Smith 978296400 +98765432100", ss.str());
+		EXPECT_EQ("Anna Mary Smith 978296400 +98765432100", (std::stringstream() << person).str());
 	}
 
 	TEST(Person, Equality) {
@@ -71,13 +67,8 @@ namespace PersonTesting {
 	//}
 
 	TEST(Person, ReadsItself) {
-
-		std::stringstream ss;
-
-		ss << person;
-
 		Person p;
-		ss >> p;
+		std::stringstream() << person >> p;
 
 		EXPECT_EQ(person, p);
 	}
@@ -130,5 +121,21 @@ namespace PersonTesting {
 		EXPECT_TRUE(person.check(Person("Anna", {}, {}, {}, "+98765432100")));
 		EXPECT_TRUE(person.check(Person({}, {}, {}, {}, {})));
 	}
+
+
+	Person readPersonFrom(stringstream ss) {
+		Person p;
+		ss >> p;
+		return p;
+	}
+
+	TEST(Person, ReadsCondition) {
+		EXPECT_EQ(readPersonFrom(stringstream("* Mary Smith 978296400 +98765432100")), Person({}, "Mary", "Smith", "2001-01-01", "+98765432100"));
+		EXPECT_EQ(readPersonFrom(stringstream("Anna * Smith 978296400 +98765432100")), Person("Anna", {}, "Smith", "2001-01-01", "+98765432100"));
+		EXPECT_EQ(readPersonFrom(stringstream("Anna Mary * 978296400 +98765432100")), Person("Anna", "Mary", {}, "2001-01-01", "+98765432100"));
+		EXPECT_EQ(readPersonFrom(stringstream("Anna Mary Smith * +98765432100")), Person("Anna", "Mary", "Smith", {}, "+98765432100"));
+		EXPECT_EQ(readPersonFrom(stringstream("Anna Mary Smith 978296400 *")), Person("Anna", "Mary", "Smith", "2001-01-01", {}));
+	}
+
 
 }
