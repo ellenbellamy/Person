@@ -19,8 +19,22 @@ void PersonCLI::setPersons(const PersonList& p) {
 
 string PersonCLI::process(const string& commandString) {
 
-	string command;
 	istringstream commandStream = istringstream(commandString);
+
+
+	if (adding) {
+		if (commandStream.rdbuf()->in_avail() == 0) {
+			adding = false;
+			return "Added";
+		}
+
+		Person person;
+		commandStream >> person;
+		persons.add(person);
+		return ">";
+	}
+
+	string command;
 	commandStream >> command;
 
 	if (command == "help") {
@@ -36,7 +50,7 @@ string PersonCLI::process(const string& commandString) {
 			"    exit				--- завершить работу и выйти\n"
 			"    birthday			--- вывести на экран людей, у которых ближайший ДР\n";
 	}
-	
+
 	if (command == "exit") {
 		return "Finished\n";
 	}
@@ -55,6 +69,14 @@ string PersonCLI::process(const string& commandString) {
 		ofstream f(fileName);
 		f << persons;
 		return "Write to: " + fileName;
+	}
+
+	if (command == "add") {
+		adding = true;
+		return ">";
+		//while (getline(input, line)) {
+		//	output << process(line);
+		//}
 	}
 
 	if (command == "sort") {

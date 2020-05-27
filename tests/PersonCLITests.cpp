@@ -103,6 +103,41 @@ TEST_F(PersonCLITests, CommandSquence) {
 	);
 }
 
+TEST_F(PersonCLITests, CommandSquence1) {
+	EXPECT_EQ(
+		executeCommandsFrom(
+			"help\n"
+		).str(),
+		"    help				--- вывести на экран список команд\n"
+		"    clear				--- очистить список\n"
+		"    load <filename>	--- добавить список из файла\n"
+		"    save <filename>	--- сохранить список в файле\n"
+		"    add				--- добавить элемент (переходит в режим ввода, начинающийс€ с \n"
+		"    sort				--- отсортировать\n"
+		"    find <услови€>		--- вывести на экран элементы, удовлетвор€ющие услови€м\n"
+		"    delete <услови€>	--- удалить элементы, удовлетвор€ющие услови€м\n"
+		"    exit				--- завершить работу и выйти\n"
+		"    birthday			--- вывести на экран людей, у которых ближайший ƒ–\n"
+	);
+
+	EXPECT_EQ(
+		executeCommandsFrom(
+			"abracadabra\n"
+		).str(),
+		"ERROR: Unknown command: abracadabra\n"
+	);
+
+	EXPECT_EQ(
+		executeCommandsFrom(
+			"exit\n"
+		).str(),
+		"Finished\n"
+	);
+
+
+}
+
+
 TEST_F(PersonCLITests, PersonsIsEmptyByDefault) {
 	ASSERT_TRUE(cli.getPersons().isEmpty());
 }
@@ -136,12 +171,91 @@ TEST_F(PersonCLITests, Save) {
 TEST_F(PersonCLITests, Sort) {
 	cli.setPersons(storedPersons);
 
-	executeCommandsFrom(string("sort\n"));
-	
+	executeCommandsFrom("sort\n");
+
 	storedPersons.sort();
 	EXPECT_EQ(cli.getPersons(), storedPersons);
 }
 
+
+TEST_F(PersonCLITests, Add) {
+	//executeCommandsFrom(
+	//	"add\n"
+	//	"111 Mary Smith 978296400 +98765432100\n"
+	//	"444 Mary Smith 978296400 +98765432100\n"
+	//	"333 Mary Smith 978296400 +98765432100\n"
+	//	"555 Mary Smith 978296400 +98765432100\n"
+	//	"222 Mary Smith 978296400 +98765432100\n"
+	//	"777 Mary Smith 978296400 +98765432100\n"
+	//	"222 Mary Smith 978296400 +98765432100\n"
+	//);
+
+	EXPECT_EQ(
+		executeCommandsFrom(
+			"add\n"
+		).str(),
+		">"
+	);
+
+
+
+	EXPECT_EQ(
+		executeCommandsFrom(
+			"111 Mary Smith 978296400 +98765432100\n"
+		).str(),
+		">"
+	);
+
+	EXPECT_EQ(
+		cli.getPersons(),
+		PersonList({
+			Person("111", "Mary", "Smith", "2001-01-01", "+98765432100")
+			})
+	);
+
+
+
+	EXPECT_EQ(
+		executeCommandsFrom(
+			"222 Mary Smith 978296400 +98765432100\n"
+		).str(),
+		">"
+	);
+
+	EXPECT_EQ(
+		cli.getPersons(),
+		PersonList({
+			Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
+			Person("222", "Mary", "Smith", "2001-01-01", "+98765432100")
+			})
+	);
+
+
+	EXPECT_EQ(
+		executeCommandsFrom(
+			"333 Mary Smith 978296400 +98765432100\n"
+		).str(),
+		">"
+	);
+
+	EXPECT_EQ(
+		cli.getPersons(),
+		PersonList({
+			Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
+			Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"),
+			Person("333", "Mary", "Smith", "2001-01-01", "+98765432100")
+			})
+	);
+
+
+
+	EXPECT_EQ(
+		executeCommandsFrom(
+			"\n"
+		).str(),
+		"Added"
+	);
+}
 
 /*
 
@@ -151,7 +265,7 @@ TEST_F(PersonCLITests, Sort) {
 		+ load <filename> --- добавить список из файла
 		+ save <filename> --- сохранить список в файле
 		- add(переходит в режим ввода, начинающийс€ с ">") --- добавить элемент
-		- sort --- отсортировать
+		+ sort --- отсортировать
 		- find <услови€> --- вывести на экран элементы, удовлетвор€ющие услови€м
 		- delete <услови€> --- удалить элементы, удовлетвор€ющие услови€м
 		+ exit --- завершить работу и выйти.

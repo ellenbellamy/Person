@@ -17,4 +17,5 @@ public:
 
 private:
 	PersonList persons;
+	bool adding = false;
 };
