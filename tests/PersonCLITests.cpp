@@ -48,7 +48,6 @@ protected:
 };
 
 
-
 TEST_F(PersonCLITests, Help) {
 	EXPECT_EQ(
 		executeCommandsFrom("help\n").str(),
@@ -65,6 +64,7 @@ TEST_F(PersonCLITests, Help) {
 	);
 }
 
+
 TEST_F(PersonCLITests, UnknownCommand) {
 	EXPECT_EQ(
 		executeCommandsFrom("abracadabra\n").str(),
@@ -72,12 +72,14 @@ TEST_F(PersonCLITests, UnknownCommand) {
 	);
 }
 
+
 TEST_F(PersonCLITests, Exit) {
 	EXPECT_EQ(
 		executeCommandsFrom("exit\n").str(),
 		"Finished\n"
 	);
 }
+
 
 TEST_F(PersonCLITests, CommandSquence) {
 	EXPECT_EQ(
@@ -102,6 +104,7 @@ TEST_F(PersonCLITests, CommandSquence) {
 		"Finished\n"
 	);
 }
+
 
 TEST_F(PersonCLITests, CommandSquence1) {
 	EXPECT_EQ(
@@ -142,6 +145,7 @@ TEST_F(PersonCLITests, PersonsIsEmptyByDefault) {
 	ASSERT_TRUE(cli.getPersons().isEmpty());
 }
 
+
 TEST_F(PersonCLITests, Clear) {
 	cli.getPersons().add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
 	ASSERT_FALSE(cli.getPersons().isEmpty());
@@ -156,6 +160,7 @@ TEST_F(PersonCLITests, Load) {
 	EXPECT_EQ(cli.getPersons(), storedPersons);
 }
 
+
 TEST_F(PersonCLITests, Save) {
 	cli.setPersons(storedPersons);
 
@@ -168,6 +173,7 @@ TEST_F(PersonCLITests, Save) {
 	EXPECT_EQ(p, storedPersons);
 }
 
+
 TEST_F(PersonCLITests, Sort) {
 	cli.setPersons(storedPersons);
 
@@ -179,17 +185,6 @@ TEST_F(PersonCLITests, Sort) {
 
 
 TEST_F(PersonCLITests, Add) {
-	//executeCommandsFrom(
-	//	"add\n"
-	//	"111 Mary Smith 978296400 +98765432100\n"
-	//	"444 Mary Smith 978296400 +98765432100\n"
-	//	"333 Mary Smith 978296400 +98765432100\n"
-	//	"555 Mary Smith 978296400 +98765432100\n"
-	//	"222 Mary Smith 978296400 +98765432100\n"
-	//	"777 Mary Smith 978296400 +98765432100\n"
-	//	"222 Mary Smith 978296400 +98765432100\n"
-	//);
-
 	EXPECT_EQ(
 		executeCommandsFrom(
 			"add\n"
@@ -257,6 +252,60 @@ TEST_F(PersonCLITests, Add) {
 	);
 }
 
+
+TEST_F(PersonCLITests, Find) {
+	cli.setPersons(storedPersons);
+
+	EXPECT_EQ(
+		executeCommandsFrom("find Anna Mary Smith 978296400 +98765432100\n").str(),
+		"Found:\n"
+	);
+
+	EXPECT_EQ(
+		executeCommandsFrom("find * Mary Smith * +98765432100\n").str(),
+		"Found:\n"
+		"111 Mary Smith 978296400 +98765432100\n"
+		"444 Mary Smith 978296400 +98765432100\n"
+		"333 Mary Smith 978296400 +98765432100\n"
+		"555 Mary Smith 978296400 +98765432100\n"
+		"222 Mary Smith 978296400 +98765432100\n"
+		"777 Mary Smith 978296400 +98765432100\n"
+		"222 Mary Smith 978296400 +98765432100\n"
+	);
+}
+
+
+TEST_F(PersonCLITests, Delete) {
+	cli.setPersons(storedPersons);
+
+	EXPECT_EQ(
+		executeCommandsFrom("delete Mary Smith 978296400 +98765432100\n").str(),
+		"Deleted\n"
+	);
+	EXPECT_EQ(cli.getPersons(), storedPersons);
+
+
+	EXPECT_EQ(
+		executeCommandsFrom("delete 222 Mary Smith * +98765432100\n").str(),
+		"Deleted\n"
+	);
+	EXPECT_EQ(cli.getPersons(), PersonList({
+		Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
+		Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"),
+		Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"),
+		Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"),
+		Person("777", "Mary", "Smith", "2001-01-01", "+98765432100")
+		}));
+
+	EXPECT_EQ(
+		executeCommandsFrom("delete * Mary Smith * +98765432100\n").str(),
+		"Deleted\n"
+	);
+	EXPECT_TRUE(cli.getPersons().isEmpty());
+}
+
+
+
 /*
 
 		ќпределить в функции main интерпретатор командной строки, реализующий команды :
@@ -266,8 +315,8 @@ TEST_F(PersonCLITests, Add) {
 		+ save <filename> --- сохранить список в файле
 		+ add(переходит в режим ввода, начинающийс€ с ">") --- добавить элемент
 		+ sort --- отсортировать
-		- find <услови€> --- вывести на экран элементы, удовлетвор€ющие услови€м
-		- delete <услови€> --- удалить элементы, удовлетвор€ющие услови€м
+		+ find <услови€> --- вывести на экран элементы, удовлетвор€ющие услови€м
+		+ delete <услови€> --- удалить элементы, удовлетвор€ющие услови€м
 		+ exit --- завершить работу и выйти.
 		- birthday --- вывести на экран людей, у которых ближайший ƒ–
 

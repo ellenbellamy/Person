@@ -74,14 +74,35 @@ string PersonCLI::process(const string& commandString) {
 	if (command == "add") {
 		adding = true;
 		return ">";
-		//while (getline(input, line)) {
-		//	output << process(line);
-		//}
 	}
 
 	if (command == "sort") {
 		persons.sort();
 		return "Sorted";
+	}
+
+	if (command == "find") {
+		ostringstream response;
+		response << "Found:\n";
+
+		Person condition;
+		commandStream >> condition;
+
+		list<Person> found = persons.select(condition);
+		for (Person p : found) {
+			response << p << "\n";
+		}
+
+		return response.str();
+	}
+
+	if (command == "delete") {
+		Person condition;
+		commandStream >> condition;
+
+		persons.remove(condition);
+
+		return "Deleted\n";
 	}
 
 	return "ERROR: Unknown command: " + commandString + "\n";
