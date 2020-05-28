@@ -13,13 +13,13 @@ protected:
 	const char* const personsFileName = "persons.list";
 
 	PersonList storedPersons{
-		Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
-		Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"),
-		Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"),
-		Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"),
-		Person("222", "Mary", "Smith", "2001-01-01", "+98765432100"),
-		Person("777", "Mary", "Smith", "2001-01-01", "+98765432100"),
-		Person("222", "Mary", "Smith", "2001-01-01", "+98765432100")
+		Person("111", "Mary", "Smith", "2001-12-11", "+98765432100"),
+		Person("444", "Mary", "Smith", "2001-11-11", "+98765432100"),
+		Person("333", "Mary", "Smith", "2001-11-01", "+98765432100"),
+		Person("555", "Mary", "Smith", "2001-11-11", "+98765432100"),
+		Person("222", "Mary", "Smith", "2001-12-21", "+98765432100"),
+		Person("777", "Mary", "Smith", "2001-12-11", "+98765432100"),
+		Person("222", "Mary", "Smith", "2001-12-11", "+98765432100")
 	};
 
 
@@ -264,13 +264,13 @@ TEST_F(PersonCLITests, Find) {
 	EXPECT_EQ(
 		executeCommandsFrom("find * Mary Smith * +98765432100\n").str(),
 		"Found:\n"
-		"111 Mary Smith 978296400 +98765432100\n"
-		"444 Mary Smith 978296400 +98765432100\n"
-		"333 Mary Smith 978296400 +98765432100\n"
-		"555 Mary Smith 978296400 +98765432100\n"
-		"222 Mary Smith 978296400 +98765432100\n"
-		"777 Mary Smith 978296400 +98765432100\n"
-		"222 Mary Smith 978296400 +98765432100\n"
+		"111 Mary Smith 1008018000 +98765432100\n"
+		"444 Mary Smith 1005426000 +98765432100\n"
+		"333 Mary Smith 1004562000 +98765432100\n"
+		"555 Mary Smith 1005426000 +98765432100\n"
+		"222 Mary Smith 1008882000 +98765432100\n"
+		"777 Mary Smith 1008018000 +98765432100\n"
+		"222 Mary Smith 1008018000 +98765432100\n"
 	);
 }
 
@@ -290,12 +290,13 @@ TEST_F(PersonCLITests, Delete) {
 		"Deleted\n"
 	);
 	EXPECT_EQ(cli.getPersons(), PersonList({
-		Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
-		Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"),
-		Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"),
-		Person("555", "Mary", "Smith", "2001-01-01", "+98765432100"),
-		Person("777", "Mary", "Smith", "2001-01-01", "+98765432100")
+		Person("111", "Mary", "Smith", "2001-12-11", "+98765432100"),
+		Person("444", "Mary", "Smith", "2001-11-11", "+98765432100"),
+		Person("333", "Mary", "Smith", "2001-11-01", "+98765432100"),
+		Person("555", "Mary", "Smith", "2001-11-11", "+98765432100"),
+		Person("777", "Mary", "Smith", "2001-12-11", "+98765432100")
 		}));
+
 
 	EXPECT_EQ(
 		executeCommandsFrom("delete * Mary Smith * +98765432100\n").str(),
