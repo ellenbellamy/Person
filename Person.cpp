@@ -28,6 +28,7 @@ Person::Person(
 	firstName = firstNameStringOrNull;
 	lastName = lastNameStringOrNull;
 	middleName = middleNameStringOrNull;
+
 	if (birthdayStringOrNull.has_value()) {
 		birthdayTm = readDateTm(birthdayStringOrNull.value());
 		birthday = mktime(&birthdayTm.value());
@@ -36,9 +37,20 @@ Person::Person(
 		birthdayTm = nullopt;
 		birthday = nullopt;
 	}
+
 	phone = phoneStringOrNull;
 }
 
+
+void Person::setBirthday(const tm& tm) {
+	birthdayTm = tm;
+	birthday = mktime(&birthdayTm.value());
+}
+
+void Person::setBirthday(const time_t t) {
+	birthday = t;
+	birthdayTm = convertTime(t);
+}
 
 
 Person::Person(const Person& aPerson) {
@@ -164,6 +176,13 @@ int Person::daysUntilBirthday(tm& tm) const {
 
 	return difftime(nextBirthday, dateOnly) / ((double)60 * 60 * 24);
 }
+
+
+int Person::daysUntilBirthday() const {
+	tm ttt = convertTime(time(NULL));
+	return daysUntilBirthday(ttt);
+}
+
 
 bool Person::check(const Person& condition) const {
 	return

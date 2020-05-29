@@ -2,37 +2,46 @@
 #include "../Person.h"
 
 namespace PersonTesting {
-	Person person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100");
 
-	TEST(Person, HasFirstName) {
+	class PersonTests : public ::testing::Test
+	{
+	protected:
+		Person person;
+
+		void SetUp() {
+			person = Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100");
+		}
+	};
+
+	TEST_F(PersonTests, HasFirstName) {
 		EXPECT_EQ(person.getFirstName(), "Anna");
 	}
 
-	TEST(Person, HasLastName) {
+	TEST_F(PersonTests, HasLastName) {
 		EXPECT_EQ(person.getLastName(), "Smith");
 	}
 
-	TEST(Person, HasMiddleName) {
+	TEST_F(PersonTests, HasMiddleName) {
 		EXPECT_EQ(person.getMiddleName(), "Mary");
 	}
 
-	TEST(Person, WritesItself) {
+	TEST_F(PersonTests, WritesItself) {
 		EXPECT_EQ("Anna Mary Smith 978296400 +98765432100", (std::stringstream() << person).str());
 	}
 
-	TEST(Person, Equality) {
+	TEST_F(PersonTests, Equality) {
 		EXPECT_EQ(
 			Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100"),
 			Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100"));
 	}
 
-	TEST(Person, EqualityIgnoresPhone) {
+	TEST_F(PersonTests, EqualityIgnoresPhone) {
 		EXPECT_EQ(
 			Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100"),
 			Person("Anna", "Mary", "Smith", "2001-01-01", "+9 876 543 21 01"));
 	}
 
-	TEST(Person, Inequality) {
+	TEST_F(PersonTests, Inequality) {
 		EXPECT_NE(
 			Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100"),
 			Person("Anna", "Mary", "Smith_", "2001-01-01", "+98765432100"));
@@ -47,13 +56,13 @@ namespace PersonTesting {
 			Person("Anna", "Mary", "Smith", "2001-01-02", "+98765432100"));
 	}
 
-	TEST(Person, LessByBirthday) {
+	TEST_F(PersonTests, LessByBirthday) {
 		EXPECT_LT(
 			Person("Anna", "Mary", "Smith", "2001-01-02", "+98765432100"),
 			Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100"));
 	}
 
-	TEST(Person, LessIgnoresPhone) {
+	TEST_F(PersonTests, LessIgnoresPhone) {
 		EXPECT_FALSE(
 			Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")
 			<
@@ -66,25 +75,25 @@ namespace PersonTesting {
 	//	EXPECT_THROW( p /*= Person("Anna", "Mary", "Smith", "2001-02-29", "+98765432100")*/, WrongDateFormat);
 	//}
 
-	TEST(Person, ReadsItself) {
+	TEST_F(PersonTests, ReadsItself) {
 		Person p;
 		std::stringstream() << person >> p;
 
 		EXPECT_EQ(person, p);
 	}
 
-	TEST(Person, Assignment) {
+	TEST_F(PersonTests, Assignment) {
 		Person p;
 		p = person;
 		EXPECT_EQ(person, p);
 	}
 
-	TEST(Person, Copy) {
+	TEST_F(PersonTests, Copy) {
 		Person p(person);
 		EXPECT_EQ(person, p);
 	}
 
-	TEST(Person, DaysUntilBirthday) {
+	TEST_F(PersonTests, DaysUntilBirthday) {
 		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2001-01-01")), 0);
 		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-12-31")), 1);
 		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-12-30")), 2);
@@ -102,7 +111,30 @@ namespace PersonTesting {
 		EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-01-02")), 365);
 	}
 
-	TEST(Person, Check) {
+
+	TEST_F(PersonTests, DaysUntilBirthdayFromToday) {
+		person.setBirthday(time(NULL));
+		EXPECT_EQ(person.daysUntilBirthday(), 0);
+
+		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-12-31")), 1);
+		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-12-30")), 2);
+		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-01-02")), 365);
+
+		//EXPECT_EQ(person.daysUntilBirthday(convertTime(readDate("2000-12-31") + 1)), 1);
+		//EXPECT_EQ(person.daysUntilBirthday(convertTime(readDate("2000-12-31") + 24 * 60 * 60)), 0);
+
+		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2002-01-01")), 0);
+		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2001-12-31")), 1);
+
+		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-01-01")), 0);
+		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-12-31")), 1);
+		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-12-30")), 2);
+		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-01-02")), 365);
+	}
+
+
+
+	TEST_F(PersonTests, Check) {
 		EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
 
 		EXPECT_FALSE(person.check(Person("Anna_", "Mary", "Smith", "2001-01-01", "+98765432100")));
@@ -122,14 +154,9 @@ namespace PersonTesting {
 		EXPECT_TRUE(person.check(Person({}, {}, {}, {}, {})));
 	}
 
+	Person readPersonFrom(stringstream);
 
-	Person readPersonFrom(stringstream ss) {
-		Person p;
-		ss >> p;
-		return p;
-	}
-
-	TEST(Person, ReadsCondition) {
+	TEST_F(PersonTests, ReadsCondition) {
 		EXPECT_EQ(readPersonFrom(stringstream("* Mary Smith 978296400 +98765432100")), Person({}, "Mary", "Smith", "2001-01-01", "+98765432100"));
 		EXPECT_EQ(readPersonFrom(stringstream("Anna * Smith 978296400 +98765432100")), Person("Anna", {}, "Smith", "2001-01-01", "+98765432100"));
 		EXPECT_EQ(readPersonFrom(stringstream("Anna Mary * 978296400 +98765432100")), Person("Anna", "Mary", {}, "2001-01-01", "+98765432100"));
@@ -138,4 +165,10 @@ namespace PersonTesting {
 	}
 
 
+
+	Person readPersonFrom(stringstream ss) {
+		Person p;
+		ss >> p;
+		return p;
+	}
 }

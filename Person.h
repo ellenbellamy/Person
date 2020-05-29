@@ -21,6 +21,9 @@ public:
 		const optional<string>& birthdayStringOrNull,
 		const optional<string>& phoneStringOrNull);
 
+	void setBirthday(const tm& tm);
+	void setBirthday(const time_t t);
+
 	Person(const Person&);
 
 	string getFirstName() const;
@@ -43,10 +46,7 @@ public:
 	Person& operator=(const Person& another);
 
 	int daysUntilBirthday(tm&) const;
-
-	//int daysUntilBirthday() {
-	//	return this->daysUntilBirthday(time(NULL));
-	//};
+	int daysUntilBirthday() const;
 
 	bool check(const Person&) const;
 
