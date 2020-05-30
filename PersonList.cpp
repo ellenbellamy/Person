@@ -81,6 +81,12 @@ tuple<Person, time_t, int> PersonList::nextCelebrant(tm& timestamp) const
 	return tuple<Person, time_t, int>(*nextCelebrant.first, nextCelebrant.second, nextCelebrant.first->getBirthday());
 }
 
+tuple<Person, time_t, int> PersonList::nextCelebrant() const
+{
+	tm ttt = convertTime(time(NULL));
+	return nextCelebrant(ttt);
+}
+
 list<Person> PersonList::select(const Person& condition) const
 {
 	list<Person> filtered;

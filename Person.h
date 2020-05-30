@@ -19,7 +19,18 @@ public:
 		const optional<string>& middleNameStringOrNull,
 		const optional<string>& lastNameStringOrNull,
 		const optional<string>& birthdayStringOrNull,
-		const optional<string>& phoneStringOrNull);
+		const optional<string>& phoneStringOrNull
+	);
+
+	Person(
+		const string& firstNameString,
+		const string& middleNameString,
+		const string& lastNameString,
+		const const time_t birthday,
+		const string& phoneString
+	);
+
+
 
 	void setBirthday(const tm& tm);
 	void setBirthday(const time_t t);

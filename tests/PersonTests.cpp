@@ -116,20 +116,11 @@ namespace PersonTesting {
 		person.setBirthday(time(NULL));
 		EXPECT_EQ(person.daysUntilBirthday(), 0);
 
-		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-12-31")), 1);
-		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-12-30")), 2);
-		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2000-01-02")), 365);
+		person.setBirthday(time(NULL) + ( 1 * 60 * 60 * 24 ));
+		EXPECT_EQ(person.daysUntilBirthday(), 1);
 
-		//EXPECT_EQ(person.daysUntilBirthday(convertTime(readDate("2000-12-31") + 1)), 1);
-		//EXPECT_EQ(person.daysUntilBirthday(convertTime(readDate("2000-12-31") + 24 * 60 * 60)), 0);
-
-		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2002-01-01")), 0);
-		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2001-12-31")), 1);
-
-		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-01-01")), 0);
-		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-12-31")), 1);
-		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-12-30")), 2);
-		//EXPECT_EQ(person.daysUntilBirthday(readDateTm("2020-01-02")), 365);
+		person.setBirthday(time(NULL) - (1 * 60 * 60 * 24));
+		EXPECT_EQ(person.daysUntilBirthday(), 365 - 1);
 	}
 
 
@@ -143,25 +134,25 @@ namespace PersonTesting {
 		EXPECT_FALSE(person.check(Person("Anna", "Mary", "Smith", "2001-01-02", "+98765432100")));
 		EXPECT_FALSE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432101")));
 
-		EXPECT_TRUE(person.check(Person({}, "Mary", "Smith", "2001-01-01", "+98765432100")));
-		EXPECT_TRUE(person.check(Person("Anna", {}, "Smith", "2001-01-01", "+98765432100")));
-		EXPECT_TRUE(person.check(Person("Anna", "Mary", {}, "2001-01-01", "+98765432100")));
-		EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", {}, "+98765432100")));
-		EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", {})));
-		EXPECT_TRUE(person.check(Person({}, "Mary", "Smith", "2001-01-01", {})));
+		EXPECT_TRUE(person.check(Person(nullopt, "Mary", "Smith", "2001-01-01", "+98765432100")));
+		EXPECT_TRUE(person.check(Person("Anna", nullopt, "Smith", "2001-01-01", "+98765432100")));
+		EXPECT_TRUE(person.check(Person("Anna", "Mary", nullopt, "2001-01-01", "+98765432100")));
+		EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", nullopt, "+98765432100")));
+		EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", nullopt)));
+		EXPECT_TRUE(person.check(Person(nullopt, "Mary", "Smith", "2001-01-01", nullopt)));
 		EXPECT_TRUE(person.check(Person("Anna", "Mary", "Smith", "2001-01-01", "+98765432100")));
-		EXPECT_TRUE(person.check(Person("Anna", {}, {}, {}, "+98765432100")));
-		EXPECT_TRUE(person.check(Person({}, {}, {}, {}, {})));
+		EXPECT_TRUE(person.check(Person("Anna", nullopt, nullopt, nullopt, "+98765432100")));
+		EXPECT_TRUE(person.check(Person(nullopt, nullopt, nullopt, nullopt, nullopt)));
 	}
 
 	Person readPersonFrom(stringstream);
 
 	TEST_F(PersonTests, ReadsCondition) {
-		EXPECT_EQ(readPersonFrom(stringstream("* Mary Smith 978296400 +98765432100")), Person({}, "Mary", "Smith", "2001-01-01", "+98765432100"));
-		EXPECT_EQ(readPersonFrom(stringstream("Anna * Smith 978296400 +98765432100")), Person("Anna", {}, "Smith", "2001-01-01", "+98765432100"));
-		EXPECT_EQ(readPersonFrom(stringstream("Anna Mary * 978296400 +98765432100")), Person("Anna", "Mary", {}, "2001-01-01", "+98765432100"));
-		EXPECT_EQ(readPersonFrom(stringstream("Anna Mary Smith * +98765432100")), Person("Anna", "Mary", "Smith", {}, "+98765432100"));
-		EXPECT_EQ(readPersonFrom(stringstream("Anna Mary Smith 978296400 *")), Person("Anna", "Mary", "Smith", "2001-01-01", {}));
+		EXPECT_EQ(readPersonFrom(stringstream("* Mary Smith 978296400 +98765432100")), Person(nullopt, "Mary", "Smith", "2001-01-01", "+98765432100"));
+		EXPECT_EQ(readPersonFrom(stringstream("Anna * Smith 978296400 +98765432100")), Person("Anna", nullopt, "Smith", "2001-01-01", "+98765432100"));
+		EXPECT_EQ(readPersonFrom(stringstream("Anna Mary * 978296400 +98765432100")), Person("Anna", "Mary", nullopt, "2001-01-01", "+98765432100"));
+		EXPECT_EQ(readPersonFrom(stringstream("Anna Mary Smith * +98765432100")), Person("Anna", "Mary", "Smith", nullopt, "+98765432100"));
+		EXPECT_EQ(readPersonFrom(stringstream("Anna Mary Smith 978296400 *")), Person("Anna", "Mary", "Smith", "2001-01-01", nullopt));
 	}
 
 

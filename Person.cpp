@@ -41,6 +41,14 @@ Person::Person(
 	phone = phoneStringOrNull;
 }
 
+Person::Person(const string& firstNameString, const string& middleNameString, const string& lastNameString, const time_t birthdayTimeT, const string& phoneString)
+{
+	firstName = firstNameString;
+	middleName = middleNameString;
+	lastName = lastNameString;
+	setBirthday(birthdayTimeT);
+	phone = phoneString;
+}
 
 void Person::setBirthday(const tm& tm) {
 	birthdayTm = tm;

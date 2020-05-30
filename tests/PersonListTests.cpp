@@ -10,6 +10,10 @@ namespace PersonListTesting {
 	protected:
 		PersonList persons;
 
+		//void SetUp() {
+		//	persons = PersonList();
+		//}
+
 		void TearDown() {
 			persons.clear();
 		}
@@ -106,6 +110,23 @@ namespace PersonListTesting {
 	}
 
 
+	TEST_F(PersonListTests, NextCelebrantToday) {
+		time_t today = time(NULL);
+		vector<Person> indexedPersons = {
+				Person("111", "Mary", "Smith", today + (15 * 60 * 60 * 24), "+98765432100"),
+				Person("222", "Mary", "Smith", today + (17 * 60 * 60 * 24), "+98765432100"),
+				Person("333", "Mary", "Smith", today + (1 * 60 * 60 * 24), "+98765432100"),
+				Person("444", "Mary", "Smith", today + (15 * 60 * 60 * 24), "+98765432100"),
+				Person("555", "Mary", "Smith", today - (1 * 60 * 60 * 24), "+98765432100"),
+				Person("777", "Mary", "Smith", today - (354 * 60 * 60 * 24), "+98765432100")
+		};
+		persons.addAll(list<Person>(begin(indexedPersons), end(indexedPersons)));
+
+		tuple<Person, time_t, int> celebrantInfo = persons.nextCelebrant();
+		EXPECT_TRUE(celebrantInfo == (tuple<Person, time_t, int>(indexedPersons[2], 1, indexedPersons[2].getBirthday())));
+	}
+
+
 	TEST_F(PersonListTests, Assigning) {
 		persons.add(Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"));
 		persons.add(Person("444", "Mary", "Smith", "2001-01-01", "+98765432100"));
@@ -169,7 +190,7 @@ namespace PersonListTesting {
 				}));
 
 		EXPECT_EQ(
-			persons.select(Person({}, "Mary", {}, {}, {})),
+			persons.select(Person(nullopt, "Mary", nullopt, nullopt, nullopt)),
 			list<Person>({
 				Person("111", "Mary", "Smith", "2001-01-01", "+98765432100"),
 				Person("333", "Mary", "Smith", "2001-01-01", "+98765432100"),
@@ -195,7 +216,7 @@ namespace PersonListTesting {
 
 
 		ss.str(string());
-		persons.printSelected(ss, Person({}, "Mary", {}, {}, {}));
+		persons.printSelected(ss, Person(nullopt, "Mary", nullopt, nullopt, nullopt));
 		EXPECT_EQ(
 			ss.str(),
 			"111 Mary Smith 978296400 +98765432100\n"
@@ -237,7 +258,7 @@ namespace PersonListTesting {
 					Person("888", "Mary", "Smith", "2001-01-01", "+98765432100")
 				}));
 
-		persons.remove(Person({}, "John", "Smith", {}, {}));
+		persons.remove(Person(nullopt, "John", "Smith", nullopt, nullopt));
 		EXPECT_EQ(
 			persons,
 			list<Person>({
@@ -247,7 +268,7 @@ namespace PersonListTesting {
 					Person("888", "Mary", "Smith", "2001-01-01", "+98765432100")
 				}));
 
-		persons.remove(Person({}, "Phil", "Smith", {}, {}));
+		persons.remove(Person(nullopt, "Phil", "Smith", nullopt, nullopt));
 		EXPECT_EQ(
 			persons,
 			list<Person>({
@@ -256,7 +277,7 @@ namespace PersonListTesting {
 					Person("888", "Mary", "Smith", "2001-01-01", "+98765432100")
 				}));
 
-		persons.remove(Person({}, {}, {}, {}, {}));
+		persons.remove(Person(nullopt, nullopt, nullopt, nullopt, nullopt));
 		EXPECT_TRUE(persons.isEmpty());
 	}
 

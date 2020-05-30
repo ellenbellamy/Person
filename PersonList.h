@@ -40,6 +40,7 @@ public:
 	void merge(PersonList&);
 
 	tuple<Person, time_t, int> nextCelebrant(tm&) const;
+	tuple<Person, time_t, int> nextCelebrant() const;
 
 
 
