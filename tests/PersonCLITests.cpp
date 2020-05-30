@@ -311,7 +311,26 @@ namespace PersonListTesting {
 
 
 	TEST_F(PersonCLITests, Birthday) {
-		cli.setPersons(storedPersons);
+		time_t today = time(NULL);
+		vector<Person> indexedPersons = {
+				Person("111", "Mary", "Smith", today + (15 * 60 * 60 * 24), "+98765432100"),
+				Person("222", "Mary", "Smith", today + (17 * 60 * 60 * 24), "+98765432100"),
+				Person("333", "Mary", "Smith", today + (3 * 60 * 60 * 24), "+98765432100"),
+				Person("444", "Mary", "Smith", today + (15 * 60 * 60 * 24), "+98765432100"),
+				Person("555", "Mary", "Smith", today - (1 * 60 * 60 * 24), "+98765432100"),
+				Person("777", "Mary", "Smith", today - (364 * 60 * 60 * 24), "+98765432100")
+		};
+		cli.setPersons(list<Person>(begin(indexedPersons), end(indexedPersons)));
+
+		EXPECT_EQ(
+			executeCommandsFrom("birthday\n").str(),
+			(ostringstream() << "Next celebrant: " << indexedPersons[5] <<"\n").str()
+		);
+
+
+		//tuple<Person, time_t, int> celebrantInfo = persons.nextCelebrant();
+		//EXPECT_EQ(celebrantInfo, (tuple<Person, time_t, int>(indexedPersons[2], 1, indexedPersons[2].getBirthday())));
+
 
 
 		/*

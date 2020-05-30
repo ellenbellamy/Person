@@ -105,5 +105,18 @@ string PersonCLI::process(const string& commandString) {
 		return "Deleted\n";
 	}
 
+	if (command == "birthday") {
+		ostringstream response;
+		response << "Next celebrant: ";
+
+		response << get<0>(persons.nextCelebrant());
+
+		response << "\n";
+		return response.str();
+	}
+
+
+	
+
 	return "ERROR: Unknown command: " + commandString + "\n";
 }
