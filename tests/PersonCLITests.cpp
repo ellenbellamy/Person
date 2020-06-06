@@ -282,7 +282,7 @@ namespace PersonListTesting {
 		cli.setPersons(storedPersons);
 
 		EXPECT_EQ(
-			executeCommandsFrom("delete Mary Smith 1591452500 +98765432100\n").str(),
+			executeCommandsFrom("delete Anna Mary Smith 1591452500 +98765432100\n").str(),
 			"Deleted\n"
 		);
 		EXPECT_EQ(cli.getPersons(), storedPersons);
