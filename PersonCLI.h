@@ -18,4 +18,5 @@ public:
 private:
 	PersonList persons;
 	bool adding = false;
+	bool finished = false;
 };

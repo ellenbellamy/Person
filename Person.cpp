@@ -214,7 +214,8 @@ tm readDateTm(const string& dateString) {
 }
 
 time_t readDate(const string& dateString) {
-	return  mktime(&readDateTm(dateString));
+	tm date_tm = readDateTm(dateString);
+	return  mktime(&date_tm);
 }
 
 #pragma warning(disable : 4996)

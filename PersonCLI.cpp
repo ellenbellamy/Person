@@ -4,8 +4,9 @@
 #include <tuple>
 
 void PersonCLI::start(istream& input, ostream& output) {
+	finished = false;
 	string line;
-	while (getline(input, line)) {
+	while (!finished && getline(input, line)) {
 		output << process(line);
 	}
 }
@@ -53,6 +54,7 @@ string PersonCLI::process(const string& commandString) {
 	}
 
 	if (command == "exit") {
+		finished = true;
 		return "Finished\n";
 	}
 
