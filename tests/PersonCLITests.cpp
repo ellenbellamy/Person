@@ -282,7 +282,7 @@ namespace PersonListTesting {
 		cli.setPersons(storedPersons);
 
 		EXPECT_EQ(
-			executeCommandsFrom("delete Mary Smith 978296400 +98765432100\n").str(),
+			executeCommandsFrom("delete Mary Smith 1591452500 +98765432100\n").str(),
 			"Deleted\n"
 		);
 		EXPECT_EQ(cli.getPersons(), storedPersons);
@@ -358,7 +358,7 @@ namespace PersonListTesting {
 		+ find <условия> --- вывести на экран элементы, удовлетворяющие условиям
 		+ delete <условия> --- удалить элементы, удовлетворяющие условиям
 		+ exit --- завершить работу и выйти.
-		- birthday --- вывести на экран людей, у которых ближайший ДР
+		+ birthday --- вывести на экран людей, у которых ближайший ДР
 
 */
 

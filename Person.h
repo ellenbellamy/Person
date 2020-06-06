@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <compare>
 #include <ctime>
 #include <optional>
 #include <iostream>

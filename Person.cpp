@@ -3,8 +3,6 @@
 #include <iostream>
 #include <sstream>
 
-#include <compare>
-
 #include <ctime>
 #include <iomanip>
 
@@ -12,7 +10,7 @@
 
 Person::Person() {
 	lastName = "";
-	firstName = std::nullopt;
+	firstName ="";
 	middleName = "";
 	birthdayTm = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	birthday = 0;
@@ -149,7 +147,7 @@ istream& operator>>(istream& in, Person& person)
 	person.firstName = ((fn == "*") ? nullopt : optional<string>(fn));
 	person.middleName = ((mn == "*") ? nullopt : optional<string>(mn));
 	person.lastName = ((ln == "*") ? nullopt : optional<string>(ln));
-	person.birthday = ((b == "*") ? nullopt : optional<time_t>(_atoi64(b.c_str())));
+	person.birthday = ((b == "*") ? nullopt : optional<time_t>(atoll(b.c_str())));
 
 	person.phone = ((p == "*") ? nullopt : optional<string>(p));
 
@@ -219,8 +217,13 @@ time_t readDate(const string& dateString) {
 	return  mktime(&readDateTm(dateString));
 }
 
+#pragma warning(disable : 4996)
 tm convertTime(time_t t) {
 	tm tm;
-	localtime_s(&tm, &t);
+
+	struct tm * timeinfo = localtime(&t);
+	tm = (*timeinfo);
+	//memcpy(&tm2, timeinfo, sizeof(tm));
+
 	return tm;
 }
